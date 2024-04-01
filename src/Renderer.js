@@ -1,6 +1,5 @@
 /**
- * To Do
- * Use ProgramInfo class in Renderer
+ * @ppro
  */
 class Renderer{
 
@@ -12,40 +11,34 @@ class Renderer{
     constructor(canvasId, document){
         try{
         this.canvas = document.querySelector(canvasId)
+
+
+        /**
+         * Dari yang saya baca-baca sih, best practice nya ngelompokin
+         * menjadi triplet
+         * i. ShapeInfo
+         * ii. BufferInfo
+         * iii. ProgramInfo
+         */
         this.shapes = []
+        
+        /**
+         * @type {WebGLRenderingContext}
+         */
         this.gl = canvas.getContext("webgl");
         if(!this.gl){
             throw "No webgl"
         }
-        const vert_code = 
-        `
-        attribute vec2 position;
-        attribute vec3 color;
-        varying vec3 vColor;
 
-        void main() {
-            gl_Position = vec4(position,1,1);
-            vColor = color;
-        }
-        `
-        const frag_code = 
-        `
-        precision mediump float;
-        varying vec3 vColor;
+        /*New*/
+        /**
+         * @type {ProgramInfo}
+         */
+        this.program = new ProgramInfo(this.gl)
+        this.useProgram(this.program)
 
-        void main() {
-            gl_FragColor = vec4(vColor,1.0);
-        }
-        `
-        this.program = this.createProgram(this.gl, vert_code, frag_code);
-        this.gl.useProgram(this.program);
-        
-        
 
-        this.positionAttrLoc = this.gl.getAttribLocation(this.program, "position");
-        
-        this.colorAttrLoc = this.gl.getAttribLocation(this.program, "color")
-        
+
         this.positionBuffer = this.gl.createBuffer();
         this.colorBuffer = this.gl.createBuffer();
         this.indexBuffer = this.gl.createBuffer();
@@ -58,11 +51,10 @@ class Renderer{
     /**
      * @function
      * Draw Array with only one program
-     * If want to use different program, seperate renderer and program
+     * If want to use different program, create shape-buffer-program map
      * then, in this function
      * 
      * If you want to animate, seperate bind buffer and draw into 2 different fucntion
-     * Kalau memang nggak butuh indices, nanti 
      * 
      */
     draw(){
@@ -94,9 +86,9 @@ class Renderer{
             
 
 
-            this.gl.enableVertexAttribArray(this.positionAttrLoc);
+            this.gl.enableVertexAttribArray(this.program.positionAttrLoc);
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
-            this.gl.vertexAttribPointer(this.positionAttrLoc,2,this.gl.FLOAT, false, 0,0);
+            this.gl.vertexAttribPointer(this.program.positionAttrLoc,2,this.gl.FLOAT, false, 0,0);
             
 
            
@@ -104,9 +96,9 @@ class Renderer{
 
             // Color
             console.log(shape.getColors())
-            this.gl.enableVertexAttribArray(this.colorAttrLoc);
+            this.gl.enableVertexAttribArray(this.program.colorAttrLoc);
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
-            this.gl.vertexAttribPointer(this.colorAttrLoc,3, this.gl.FLOAT,false,0,0);
+            this.gl.vertexAttribPointer(this.program.colorAttrLoc,3, this.gl.FLOAT,false,0,0);
             
 
 
@@ -157,10 +149,10 @@ class Renderer{
     }
 
     /**
-     * @param {ProgramInfo} programInfo
+     * @param {ProgramInfo} program
      */
     useProgram(program){
-        this.gl.useProgram(programInfo.program)
+        this.gl.useProgram(program.program)
     }
 
     /**
@@ -171,53 +163,83 @@ class Renderer{
         this.shapes.push(shape)
         this.draw()
     }
-
     
+
 
 }
 
 
 
-// /**
-//  * If needed, we will move program info to be attached with each Shape2D
-//  */
-// class ProgramInfo{
-//     constructor(gl, vertexCode, fragmentCode){
-//         try{
-//         var vertex = this.createShader(gl,gl.VERTEX_SHADER,vertexCode);
-//         var fragment = this.createShader(gl,gl.FRAGMENT_SHADER,fragmentCode);
-//         this.program = gl.createProgram();
-//         gl.attachShader(program,vertex);
-//         gl.attachShader(program, fragment);
-//         gl.linkProgram(program);
-//         if(!gl.getProgramParameter(program, gl.LINK_STATUS)){
-//             throw "Program Failed to initiate"
-//         }
-//         this.positionAttrLoc = this.gl.getAttribLocation(this.program, "position");
-//         this.colorAttrLoc = this.gl.getAttribLocation(this.program, "color")
-//         }
-//         catch(e){
-//             console.log(e);
-//             gl.deleteProgram(program);
-//             return null
-//         }
-//     }
+/**
+ * If needed, we will move program info to be attached with each Shape2D
+ */
+class ProgramInfo{
 
-//     createShader(gl, type, source){
-//         try{
-//         var shader = gl.createShader(type)
-//         gl.shaderSource(shader, source);
-//         gl.compileShader(shader);
-//         if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)){
-//             throw "Shader Failed to initiate"
-//         }
-//         return shader
-//         }catch(e){
-//             console.log(source)
-//             console.log(e);
-//             gl.deleteShader(e);
-//             return null;
-//         }
+    /**
+     * 
+     * @param {WebGLRenderingContext} gl 
+     * @returns 
+     */
+    constructor(gl){
+        const vert_code = 
+        `
+        attribute vec2 position;
+        attribute vec3 color;
+        varying vec3 vColor;
+
+        void main() {
+            gl_Position = vec4(position,1,1);
+            vColor = color;
+        }
+        `
+        const frag_code = 
+        `
+        precision mediump float;
+        varying vec3 vColor;
+
+        void main() {
+            gl_FragColor = vec4(vColor,1.0);
+        }
+        `
+        try{
+        var vertex = this.createShader(gl,gl.VERTEX_SHADER,vert_code);
+        var fragment = this.createShader(gl,gl.FRAGMENT_SHADER,frag_code);
+
+        /**
+         * @type {WebGLProgram}
+         */
+        this.program = gl.createProgram();
+        gl.attachShader(this.program, vertex);
+        gl.attachShader(this.program, fragment);
+        gl.linkProgram(this.program);
+        if(!gl.getProgramParameter(this.program, gl.LINK_STATUS)){
+            throw "Program Failed to initiate"
+        }
+        this.positionAttrLoc = gl.getAttribLocation(this.program, "position");
+        this.colorAttrLoc = gl.getAttribLocation(this.program, "color")
+        }
+        catch(e){
+            console.log(e);
+            gl.deleteProgram(this.program);
+            return null
+        }
+    }
+
+    createShader(gl, type, source){
+        try{
+        var shader = gl.createShader(type)
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)){
+            throw "Shader Failed to initiate"
+        }
+        return shader
+        }catch(e){
+            console.log(source)
+            console.log(e);
+            gl.deleteShader(e);
+            return null;
+        }
         
-//     }
-// }
+    }
+}
