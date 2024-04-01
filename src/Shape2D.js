@@ -28,6 +28,21 @@ class Shape2D{
     getIndices(){
         return this.indices
     }
+
+    /**
+     * @abstract
+     * @param {WebGLRenderingContext} gl
+     * @param {ProgramInfo} program
+     * @returns {None}
+     */
+    draw(gl,program){
+        
+    };
+
+
+    drawElements(gl){
+        gl.drawElements(gl.TRIANGLES, this.getIndices().length, gl.UNSIGNED_SHORT,0);
+    }
 }
 
 /**

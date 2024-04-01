@@ -51,7 +51,7 @@ class Renderer{
     /**
      * @function
      * Draw Array with only one program
-     * If want to use different program, create shape-buffer-program map
+     * If want to use different program, create buffer-program map
      * then, in this function
      * 
      * If you want to animate, seperate bind buffer and draw into 2 different fucntion
@@ -68,7 +68,6 @@ class Renderer{
 
         //Iterate all shape
         this.shapes.forEach(shape => {
-
             // Color
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(shape.getColors()), this.gl.STATIC_DRAW);
@@ -101,8 +100,8 @@ class Renderer{
             this.gl.vertexAttribPointer(this.program.colorAttrLoc,3, this.gl.FLOAT,false,0,0);
             
 
-
-            this.gl.drawElements(this.gl.TRIANGLES, shape.getIndices().length,this.gl.UNSIGNED_SHORT,0);
+            shape.drawElements(this.gl);
+            
 
             // this.gl.drawArrays(this.gl.TRIANGLES, 0, shape.getVertices().length/2);
         });

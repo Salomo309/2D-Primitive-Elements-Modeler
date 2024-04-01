@@ -23,4 +23,13 @@ class Square extends Shape2D{
             new Uniforms(new Point(x,y), color))
         
     }
+    /**
+     * @override
+     * @param {WebGLRenderingContext} gl
+     * @param {ProgramInfo} program
+     * @returns {None} 
+     */
+    draw(gl,program){
+        
+    }
 }
