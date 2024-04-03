@@ -36,7 +36,7 @@ class Shape2D{
      * @returns {None}
      */
     draw(gl,program){
-        
+
     };
 
 
@@ -96,15 +96,15 @@ class Vertices{
         })
     }
 
-    
+
 }
 
 //Attribute
 class Point{
 
     /**
-     * 
-     * @param {[Number,Number]} coor 
+     *
+     * @param {[Number,Number]} coor
      * @param {Color} color
      */
     constructor(coor, color){
@@ -113,7 +113,7 @@ class Point{
     }
 
     /**
-     * 
+     *
      * @returns {(Number, Number)}
      */
     getVertex(){
@@ -123,6 +123,12 @@ class Point{
     getColor(){
         return this.color.asArray();
     }
+
+    setCoordinates(x, y) {
+        this.coor[0] = x;
+        this.coor[1] = y;
+    }
+
     move(x, y){
         this.x += x
         this.y += y
@@ -138,7 +144,7 @@ class Color{
      * @returns {Color}
      */
 
-    
+
 
     static fromHex(hex)
     {
@@ -204,24 +210,35 @@ class Orientation{
 
 // Transformer
 class Scaler{
-    
+
     constructor(){}
-    
+
     /**
      * @param {Number} scale
      * @param {Shape2D} shape
      * @returns {None}
      */
-    resize(scale, shape){
+    resize(scale, shape) {
+        // Ambil semua titik dari objek shape
+        const vertices = shape.vertices.vertices;
 
+        // Iterasi melalui setiap titik dan sesuaikan koordinatnya dengan faktor penskalaan
+        vertices.forEach(point => {
+            const x = point.coor[0];
+            const y = point.coor[1];
+
+            // Terapkan faktor penskalaan pada setiap koordinat titik
+            point.coor[0] = x * scale;
+            point.coor[1] = y * scale;
+        });
     }
-    
+
 }
 
 //Attribute
 class Shear{
     constructor(){
-        
+
     }
 }
 
