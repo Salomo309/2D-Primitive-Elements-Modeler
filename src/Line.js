@@ -86,6 +86,20 @@ class Line extends Shape2D {
     }
 
     /**
+     * Shears the polygon along the x or y axis by the specified factors.
+     * @param {Number} shearX - Shear factor along the x-axis
+     * @param {Number} shearY - Shear factor along the y-axis
+     */
+    shear(shearX, shearY) {
+        const vertices = this.vertices.vertices;
+        vertices.forEach(point => {
+            const x = point.getVertex()[0];
+            const y = point.getVertex()[1];
+            point.setCoordinates(x + shearX * y, y + shearY * x);
+        });
+    }
+
+    /**
      * @override
      * @param {WebGLRenderingContext} gl
      */
