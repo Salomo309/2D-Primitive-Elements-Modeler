@@ -57,10 +57,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const moveBtn = document.getElementById("move-btn");
   const scaleBtn = document.getElementById("scale-btn");
 
-  objectDropdown.addEventListener("change", function () {
-    selectedObjectId = objectDropdown.value;
-  });
-
   function deactivateAllButtons() {
     rotateActive = false;
     moveActive = false;
@@ -68,6 +64,81 @@ document.addEventListener("DOMContentLoaded", function () {
     rotateBtn.classList.remove("bg-green-700", "text-white");
     moveBtn.classList.remove("bg-green-700", "text-white");
     scaleBtn.classList.remove("bg-green-700", "text-white");
+  }
+
+  function callRotateOperation(deltaX, deltaY, selectedObjectId) {
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+    if (!selectedShape) return;
+
+    if (selectedShape instanceof Line) {
+      renderer.rotateLine(deltaX, deltaY, selectedObjectId);
+    } else if (selectedShape instanceof Square) {
+      renderer.rotateSquare(deltaX, deltaY, selectedObjectId);
+    } else if (selectedShape instanceof Rectangle) {
+      renderer.rotateRectangle(deltaX, deltaY, selectedObjectId);
+    } else if (selectedShape instanceof Polygon) {
+      renderer.rotatePolygon(deltaX, deltaY, selectedObjectId);
+    }
+  }
+
+  function callTranslateOperation(deltaX, deltaY, selectedObjectId) {
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+    if (!selectedShape) return;
+
+    if (selectedShape instanceof Line) {
+      renderer.translateLine(deltaX, deltaY, selectedObjectId);
+    } else if (selectedShape instanceof Square) {
+      renderer.translateSquare(deltaX, deltaY, selectedObjectId);
+    } else if (selectedShape instanceof Rectangle) {
+      renderer.translateRectangle(deltaX, deltaY, selectedObjectId);
+    } else if (selectedShape instanceof Polygon) {
+      renderer.translatePolygon(deltaX, deltaY, selectedObjectId);
+    }
+  }
+
+  function callScaleOperation(
+    deltaX,
+    deltaY,
+    lastMouseX,
+    lastMouseY,
+    selectedObjectId
+  ) {
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+    if (!selectedShape) return;
+
+    if (selectedShape instanceof Line) {
+      renderer.scaleLine(
+        deltaX,
+        deltaY,
+        lastMouseX,
+        lastMouseY,
+        selectedObjectId
+      );
+    } else if (selectedShape instanceof Square) {
+      renderer.scaleSquare(
+        deltaX,
+        deltaY,
+        lastMouseX,
+        lastMouseY,
+        selectedObjectId
+      );
+    } else if (selectedShape instanceof Rectangle) {
+      renderer.scaleRectangle(
+        deltaX,
+        deltaY,
+        lastMouseX,
+        lastMouseY,
+        selectedObjectId
+      );
+    } else if (selectedShape instanceof Polygon) {
+      renderer.scalePolygon(
+        deltaX,
+        deltaY,
+        lastMouseX,
+        lastMouseY,
+        selectedObjectId
+      );
+    }
   }
 
   rotateBtn.addEventListener("click", function () {
@@ -94,6 +165,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const moveSpeed = 0.005;
   const scaleSpeed = 5;
 
+  let rotateActive = false;
+  let moveActive = false;
+  let scaleActive = false;
+
   renderer.canvas.addEventListener("mousedown", function (event) {
     if (rotateActive || moveActive || scaleActive) {
       mouseDown = true;
@@ -108,19 +183,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const deltaY = event.clientY - lastMouseY;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
-      renderer.rotatePolygon(deltaX, deltaY, objectDropdown.value);
+      callRotateOperation(deltaX, deltaY, objectDropdown.value);
     } else if (moveActive && mouseDown) {
       const deltaX = (event.clientX - lastMouseX) * moveSpeed;
       const deltaY = (event.clientY - lastMouseY) * moveSpeed * -1;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
-      renderer.translatePolygon(deltaX, deltaY, objectDropdown.value);
+      callTranslateOperation(deltaX, deltaY, objectDropdown.value);
     } else if (scaleActive && mouseDown) {
       const deltaX = (event.clientX - lastMouseX) * scaleSpeed;
       const deltaY = (event.clientY - lastMouseY) * scaleSpeed;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
-      renderer.scalePolygon(
+      callScaleOperation(
         deltaX,
         deltaY,
         lastMouseX,

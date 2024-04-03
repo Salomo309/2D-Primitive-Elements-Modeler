@@ -171,7 +171,11 @@ class Renderer{
         this.draw();
     }
 
-    rotatePolygon(angle) {
+    getShapeById(id) {
+        return this.shapes.find(shape => shape.id === id);
+    }
+
+    rotatePolygon(angle, selectedObjectId) {
         const polygon = this.shapes.find(shape => shape instanceof Polygon);
         if (polygon) {
             const midPoint = polygon.uniform.midPoint;
