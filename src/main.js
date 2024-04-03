@@ -38,27 +38,27 @@ document.addEventListener("DOMContentLoaded", function () {
     rotateActive = false;
     moveActive = false;
     scaleActive = false;
-    rotateBtn.classList.remove("active");
-    moveBtn.classList.remove("active");
-    scaleBtn.classList.remove("active");
+    rotateBtn.classList.remove("bg-green-700", "text-white");
+    moveBtn.classList.remove("bg-green-700", "text-white");
+    scaleBtn.classList.remove("bg-green-700", "text-white");
   }
 
   rotateBtn.addEventListener("click", function () {
     deactivateAllButtons();
     rotateActive = true;
-    rotateBtn.classList.add("active");
+    rotateBtn.classList.add("bg-green-700", "text-white");
   });
 
   moveBtn.addEventListener("click", function () {
     deactivateAllButtons();
     moveActive = true;
-    moveBtn.classList.add("active");
+    moveBtn.classList.add("bg-green-700", "text-white");
   });
 
   scaleBtn.addEventListener("click", function () {
     deactivateAllButtons();
     scaleActive = true;
-    scaleBtn.classList.add("active");
+    scaleBtn.classList.add("bg-green-700", "text-white");
   });
 
   let mouseDown = false;
