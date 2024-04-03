@@ -31,19 +31,35 @@ document.addEventListener("DOMContentLoaded", function () {
   // ----- TOOLS ------
 
   const rotateBtn = document.getElementById("rotate-btn");
-  let rotateActive = false;
+  const moveBtn = document.getElementById("move-btn");
+  const scaleBtn = document.getElementById("scale-btn");
+
+  function deactivateAllButtons() {
+    rotateActive = false;
+    moveActive = false;
+    rotateBtn.classList.remove("active");
+    moveBtn.classList.remove("active");
+  }
 
   rotateBtn.addEventListener("click", function () {
-    rotateActive = !rotateActive;
-    rotateBtn.classList.toggle("active", rotateActive);
+    deactivateAllButtons();
+    rotateActive = true;
+    rotateBtn.classList.add("active");
+  });
+
+  moveBtn.addEventListener("click", function () {
+    deactivateAllButtons();
+    moveActive = true;
+    moveBtn.classList.add("active");
   });
 
   let mouseDown = false;
   let lastMouseX = 0;
   let lastMouseY = 0;
+  const moveSpeed = 0.01;
 
   renderer.canvas.addEventListener("mousedown", function (event) {
-    if (rotateActive) {
+    if (rotateActive || moveActive) {
       mouseDown = true;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
@@ -57,6 +73,12 @@ document.addEventListener("DOMContentLoaded", function () {
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
       renderer.rotatePolygon(deltaX, deltaY);
+    } else if (moveActive && mouseDown) {
+      const deltaX = (event.clientX - lastMouseX) * moveSpeed;
+      const deltaY = (event.clientY - lastMouseY) * moveSpeed * -1;
+      lastMouseX = event.clientX;
+      lastMouseY = event.clientY;
+      renderer.translatePolygon(deltaX, deltaY);
     }
   });
 

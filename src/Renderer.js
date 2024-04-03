@@ -176,6 +176,14 @@ class Renderer{
             this.draw();
         }
     }
+
+    translatePolygon(deltaX, deltaY) {
+        const polygon = this.shapes.find(shape => shape instanceof Polygon);
+        if (polygon) {
+            polygon.translate(deltaX, deltaY);
+            this.draw();
+        }
+    }
 }
 
 
