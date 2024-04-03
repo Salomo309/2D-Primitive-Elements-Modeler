@@ -104,53 +104,39 @@ class Polygon extends Shape2D {
      * @param {Number} y - Y-coordinate of the new vertex
      */
     addVertex(x, y) {
+        const vertices = this.vertices.vertices;
+        const numVertices = vertices.length / 2;
+
+        // New MidPoint
         const midPoint = this.uniform.midPoint;
-        const numVertices = this.vertices.vertices.length / 2;
-
-        // // Coordinat otomatis
-        // const lastVertex = this.vertices.vertices[this.vertices.vertices.length - 1].coor;
-        // const firstVertex = this.vertices.vertices[0].coor;
-
-        // let newX = (lastVertex[0] + firstVertex[0]) / 2;
-        // let newY = (lastVertex[1] + firstVertex[1]) / 2;
-
-        // if (newX < midPoint.coor[0]) {
-        //     newX -= 0.1
-        // } else {
-        //     newX += 0.1
-        // }
-
-        // if (newY < midPoint.coor[1]) {
-        //     newY -= 0.1
-        // } else {
-        //     newY += 0.1
-        // }
-
-        // const newMidX = (midPoint.coor[0] * numVertices + newX) / (numVertices + 1);
-        // const newMidY = (midPoint.coor[1] * numVertices + newY) / (numVertices + 1);
-
-        // Coordinat baru dari User
-
         const newMidX = (midPoint.coor[0] * numVertices + x) / (numVertices + 1);
         const newMidY = (midPoint.coor[1] * numVertices + y) / (numVertices + 1);
 
-        // Update uniform
-        this.uniform.midPoint.setCoordinates(newMidX, newMidY);
-
-        // Add new vertex to vertices array
+        // New point
         const newPoint = new Point([x, y], Color.fromHex(this.color));
-        // const newPoint = new Point([newX, newY], Color.fromHex(this.color));
-        this.vertices.vertices.push(newPoint);
 
+        // Nearest 2-Point (cari 2 point terdekat)
+        let minDistance = Number.POSITIVE_INFINITY;
+        let nearestIndex = -1;
 
-        console.log(this.vertices.vertices)
+        for (let i = 0; i < vertices.length; i += 2) {
+            const vertexX = vertices[i].getVertex()[0];
+            const vertexY = vertices[i].getVertex()[1];
+            const distance = Math.sqrt((x - vertexX) ** 2 + (y - vertexY) ** 2);
 
-        // Update number of vertices
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestIndex = i;
+            }
+        }
+
+        // Insert New Point
+        vertices.splice(nearestIndex, 0, newPoint);
+
         this.numVertices++;
-
-        // Update indices
         this.updateIndices();
-        this.rotate(newMidX, newMidY, 10)
+        this.uniform.midPoint.setCoordinates(newMidX, newMidY);
+        // this.rotate(newMidX, newMidY, 10);
     }
 
     /**
