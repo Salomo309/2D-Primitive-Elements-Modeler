@@ -62,6 +62,41 @@ class Polygon extends Shape2D {
         this.uniform.midPoint = pivot;
     }
 
+    rotateByMouse(deltaX, deltaY) {
+        const pivotX = this.uniform.midPoint.coor[0];
+        const pivotY = this.uniform.midPoint.coor[1];
+        
+        // Calculate initial mouse position relative to pivot
+        const initialMouseX = lastMouseX - pivotX;
+        const initialMouseY = lastMouseY - pivotY;
+        
+        // Calculate current mouse position relative to pivot
+        const currentMouseX = lastMouseX + deltaX - pivotX;
+        const currentMouseY = lastMouseY + deltaY - pivotY;
+        
+        // Calculate initial angle
+        const initialAngle = Math.atan2(initialMouseY, initialMouseX);
+        
+        // Calculate current angle
+        const currentAngle = Math.atan2(currentMouseY, currentMouseX);
+        
+        // Calculate the angle of rotation
+        let angle = currentAngle - initialAngle;
+        
+        // Normalize the angle to be between -π and π
+        if (angle > Math.PI) {
+            angle -= 2 * Math.PI;
+        } else if (angle < -Math.PI) {
+            angle += 2 * Math.PI;
+        }
+        
+        this.rotate(pivotX, pivotY, angle);
+        
+        lastMouseX += deltaX;
+        lastMouseY += deltaY;
+    }
+    
+
     /**
      * Translates the polygon by the specified amounts along the x and y axes.
      * @param {Number} deltaX - Amount of translation along the x-axis
@@ -82,6 +117,18 @@ class Polygon extends Shape2D {
         const scaler = new Scaler();
         scaler.resize(scale, this);
     }
+
+    scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {
+        const pivotX = this.uniform.midPoint.coor[0];
+        const pivotY = this.uniform.midPoint.coor[1];
+    
+        const initialDistance = Math.sqrt((lastMouseX - pivotX) ** 2 + (lastMouseY - pivotY) ** 2);
+        const currentDistance = Math.sqrt((lastMouseX + deltaX - pivotX) ** 2 + (lastMouseY + deltaY - pivotY) ** 2);
+        const scale = currentDistance / initialDistance;
+        this.scale(scale);
+    }
+    
+
     /**
      * Shears the polygon along the x or y axis by the specified factors.
      * @param {Number} shearX - Shear factor along the x-axis

@@ -11,6 +11,7 @@ class Renderer{
     constructor(canvasId, document){
         try{
         this.canvas = document.querySelector(canvasId)
+        this.shapeCounter = 1;
 
 
         /**
@@ -159,6 +160,8 @@ class Renderer{
      * @returns {None}
      */
     addShape(shape){
+        shape.id = `${shape.constructor.name.toLowerCase()}${this.shapeCounter}`;
+        this.shapeCounter++;
         this.shapes.push(shape)
         this.draw()
     }
@@ -168,6 +171,34 @@ class Renderer{
         this.draw();
     }
 
+    getShapeById(id) {
+        return this.shapes.find(shape => shape.id === id);
+    }
+
+    rotatePolygon(angle, selectedObjectId) {
+        const polygon = this.shapes.find(shape => shape instanceof Polygon);
+        if (polygon) {
+            const midPoint = polygon.uniform.midPoint;
+            polygon.rotate(midPoint.coor[0], midPoint.coor[1], angle);
+            this.draw();
+        }
+    }
+
+    translatePolygon(deltaX, deltaY, selectedObjectId) {
+        const polygon = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (polygon) {
+            polygon.translate(deltaX, deltaY);
+            this.draw();
+        }
+    }
+
+    scalePolygon(deltaX, deltaY, lastMouseX, lastMouseY, selectedObjectId) {
+        const polygon = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (polygon) {
+            polygon.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY);
+            this.draw();
+        }
+    }    
 }
 
 

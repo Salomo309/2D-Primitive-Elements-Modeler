@@ -15,8 +15,10 @@
 
 <body>
     <div class="flex flex-wrap">
-        <canvas id="canvas" class="h-screen w-full md:w-2/3 md:pr-4 mb-4 md:mb-0">
-        </canvas>
+        <div class="flex justify-center items-center w-full md:w-2/3 md:pr-4 mb-4 md:mb-0">
+            <canvas id="canvas" height="600rem" width="600rem">
+            </canvas>
+        </div>
 
         <div class="h-screen w-full md:w-1/3 p-4">
             <div class="mb-8">
@@ -44,10 +46,7 @@
                 <h1 class="text-xl font-bold text-center mb-3">List Objects</h1>
                 <div class="flex justify-center items-center gap-2">
                     <div class="relative">
-                        <select id="objects-dropdown" class="border border-black py-1 px-4 rounded">
-                            <option value="square1">Square 1</option>
-                            <option value="square2">Square 2</option>
-                            <option value="square3">Square 3</option>
+                        <select id="objects-dropdown" class="border border-black py-1 px-4 rounded w-44">
                         </select>
                     </div>
                 </div>
@@ -58,25 +57,25 @@
                 <div class="flex flex-col justify-center items-center gap-2">
                     <div class="flex justify-center items-center gap-2">
                         <button id="rotate-btn"
-                            class="border border-green-800 text-green-800 focus:bg-green-700 focus:text-white py-1 px-4 rounded">
+                            class="border border-green-800 text-green-800 py-1 px-4 rounded">
                             Rotate
                         </button>
                         <button id="move-btn"
-                            class="border border-green-800 text-green-800 focus:bg-green-700 focus:text-white py-1 px-4 rounded">
+                            class="border border-green-800 text-green-800 py-1 px-4 rounded">
                             Move
                         </button>
                         <button id="scale-btn"
-                            class="border border-green-800 text-green-800 focus:bg-green-700 focus:text-white py-1 px-4 rounded">
+                            class="border border-green-800 text-green-800 py-1 px-4 rounded">
                             Scale
                         </button>
                     </div>
                     <div class="flex justify-center items-center gap-2">
                         <button id="addpoint-btn"
-                            class="border border-green-800 text-green-800 focus:bg-green-700 focus:text-white py-1 px-4 rounded">
+                            class="border border-green-800 text-green-800 py-1 px-4 rounded">
                             Add Point
                         </button>
                         <button id="deletepoint-btn"
-                            class="border border-green-800 text-green-800 focus:bg-green-700 focus:text-white py-1 px-4 rounded">
+                            class="border border-green-800 text-green-800 py-1 px-4 rounded">
                             Delete Point
                         </button>
                     </div>
