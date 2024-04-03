@@ -11,6 +11,7 @@ class Renderer{
     constructor(canvasId, document){
         try{
         this.canvas = document.querySelector(canvasId)
+        this.shapeCounter = 1;
 
 
         /**
@@ -159,6 +160,8 @@ class Renderer{
      * @returns {None}
      */
     addShape(shape){
+        shape.id = `${shape.constructor.name.toLowerCase()}${this.shapeCounter}`;
+        this.shapeCounter++;
         this.shapes.push(shape)
         this.draw()
     }
