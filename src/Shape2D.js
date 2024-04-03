@@ -1,5 +1,22 @@
 
+// /**
+//  * Custom matmul for coordinate matriks
+//  * It also reduce the need to transpose matrix twice
+//  * @param {} mat1 size = 2x2
+//  * @param {*} mat2 size = 2xn
+//  * @param {*} n 
+//  * @param {*} m 
+//  * @returns {Number[]} size = 2xn
+//  */
+// function customMatMul(mat1, mat2, n){
+//     let result = Array<Number>(n*2)
 
+//     for(let j=0;j<n;j+=2){
+//         result[j*2]=   mat1[0]*mat2[j] + mat1[1]*mat2[j+1]
+//         result[j*2+1] =  mat1[2]*mat2[j] + mat1[3]*mat2[j+1]
+//     }
+//     return result
+// }
 
 class Shape2D{
 
@@ -30,19 +47,68 @@ class Shape2D{
     }
 
     /**
+     * @deprecated
      * @abstract
      * @param {WebGLRenderingContext} gl
      * @param {ProgramInfo} program
      * @returns {None}
      */
-    draw(gl,program){
-
-    };
+    draw(gl,program){};
 
 
     drawElements(gl){
         gl.drawElements(gl.TRIANGLES, this.getIndices().length, gl.UNSIGNED_SHORT,0);
     }
+
+    translate(deltaX,deltaY){
+        this.vertices.vertices.forEach(point=>{
+            point.move(deltaX,deltaX)
+        })
+        this.uniform.midPoint.move(deltaX,deltaY)
+    }
+
+    rotate(pivotX, pivotY, angle){
+        const pivot = new Point([pivotX, pivotY], this.color);
+        const orientation = new Orientation();
+        orientation.rotate(angle);
+
+        const rotationMatrix = orientation.createMatrix();
+
+        const vertices = this.vertices.vertices;
+        for (let i = 0; i < vertices.length; i++) {
+            const x = vertices[i].getVertex()[0];
+            const y = vertices[i].getVertex()[1];
+
+            const relativeX = x - pivotX;
+            const relativeY = y - pivotY;
+
+            const rotatedX = rotationMatrix[0] * relativeX + rotationMatrix[1] * relativeY;
+            const rotatedY = rotationMatrix[2] * relativeX + rotationMatrix[3] * relativeY;
+
+            vertices[i].setCoordinates(rotatedX + pivotX, rotatedY + pivotY);
+        }
+
+        this.uniform.rotation = orientation;
+        this.uniform.midPoint = pivot;
+        
+    }
+
+    scale(scale){
+        // Ambil semua titik dari objek shape
+        const vertices = shape.vertices.vertices;
+
+        // Iterasi melalui setiap titik dan sesuaikan koordinatnya dengan faktor penskalaan
+        vertices.forEach(point => {
+            const x = point.coor[0];
+            const y = point.coor[1];
+
+            // Terapkan faktor penskalaan pada setiap koordinat titik
+            point.coor[0] = x * scale;
+            point.coor[1] = y * scale;
+        });
+        this.uniform.midPoint.coor = this.uniform.midPoint.scale(scale)
+    }
+    
 }
 
 /**
@@ -50,14 +116,6 @@ class Shape2D{
  * just array of number
  */
 class Vertices{
-
-    // /**
-    //  * @param {Point[]} points
-    //  */
-    // constructor(points){
-    //     this.vertices = points
-    // }
-
     /**
      * @param {Number[]} vertices
      * @param {String} hex
@@ -134,6 +192,11 @@ class Point{
         this.y += y
     }
 
+    scale(scale){
+        this.x *=scale
+        this.y *=scale
+    }
+
 }
 
 
@@ -143,9 +206,6 @@ class Color{
      * @param {String} hex
      * @returns {Color}
      */
-
-
-
     static fromHex(hex)
     {
         var instance = new Color(0,0,0)
@@ -254,5 +314,9 @@ class Uniforms{
         this.rotation = new Orientation()
         this.shear = new Shear()
         this.midPoint = point
+    }
+
+    rotate(degree){
+        this.rotation.rotate(degree);
     }
 }
