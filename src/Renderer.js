@@ -162,8 +162,11 @@ class Renderer{
         this.shapes.push(shape)
         this.draw()
     }
-    
 
+    clearCanvas() {
+        this.shapes = [];
+        this.draw();
+    }
 
 }
 
