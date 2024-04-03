@@ -180,16 +180,16 @@ class Renderer{
         }
     }
 
-    translatePolygon(deltaX, deltaY) {
-        const polygon = this.shapes.find(shape => shape instanceof Polygon);
+    translatePolygon(deltaX, deltaY, selectedObjectId) {
+        const polygon = this.shapes.find(shape => shape.id === selectedObjectId);
         if (polygon) {
             polygon.translate(deltaX, deltaY);
             this.draw();
         }
     }
 
-    scalePolygon(deltaX, deltaY, lastMouseX, lastMouseY) {
-        const polygon = this.shapes.find(shape => shape instanceof Polygon);
+    scalePolygon(deltaX, deltaY, lastMouseX, lastMouseY, selectedObjectId) {
+        const polygon = this.shapes.find(shape => shape.id === selectedObjectId);
         if (polygon) {
             polygon.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY);
             this.draw();

@@ -52,9 +52,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ----- TOOLS ------
 
+  const objectDropdown = document.getElementById("objects-dropdown");
   const rotateBtn = document.getElementById("rotate-btn");
   const moveBtn = document.getElementById("move-btn");
   const scaleBtn = document.getElementById("scale-btn");
+
+  objectDropdown.addEventListener("change", function () {
+    selectedObjectId = objectDropdown.value;
+  });
 
   function deactivateAllButtons() {
     rotateActive = false;
@@ -103,19 +108,25 @@ document.addEventListener("DOMContentLoaded", function () {
       const deltaY = event.clientY - lastMouseY;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
-      renderer.rotatePolygon(deltaX, deltaY);
+      renderer.rotatePolygon(deltaX, deltaY, objectDropdown.value);
     } else if (moveActive && mouseDown) {
       const deltaX = (event.clientX - lastMouseX) * moveSpeed;
       const deltaY = (event.clientY - lastMouseY) * moveSpeed * -1;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
-      renderer.translatePolygon(deltaX, deltaY);
+      renderer.translatePolygon(deltaX, deltaY, objectDropdown.value);
     } else if (scaleActive && mouseDown) {
       const deltaX = (event.clientX - lastMouseX) * scaleSpeed;
       const deltaY = (event.clientY - lastMouseY) * scaleSpeed;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
-      renderer.scalePolygon(deltaX, deltaY, lastMouseX, lastMouseY);
+      renderer.scalePolygon(
+        deltaX,
+        deltaY,
+        lastMouseX,
+        lastMouseY,
+        objectDropdown.value
+      );
     }
   });
 
