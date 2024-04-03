@@ -37,8 +37,10 @@ document.addEventListener("DOMContentLoaded", function () {
   function deactivateAllButtons() {
     rotateActive = false;
     moveActive = false;
+    scaleActive = false;
     rotateBtn.classList.remove("active");
     moveBtn.classList.remove("active");
+    scaleBtn.classList.remove("active");
   }
 
   rotateBtn.addEventListener("click", function () {
@@ -53,13 +55,20 @@ document.addEventListener("DOMContentLoaded", function () {
     moveBtn.classList.add("active");
   });
 
+  scaleBtn.addEventListener("click", function () {
+    deactivateAllButtons();
+    scaleActive = true;
+    scaleBtn.classList.add("active");
+  });
+
   let mouseDown = false;
   let lastMouseX = 0;
   let lastMouseY = 0;
-  const moveSpeed = 0.01;
+  const moveSpeed = 0.005;
+  const scaleSpeed = 5;
 
   renderer.canvas.addEventListener("mousedown", function (event) {
-    if (rotateActive || moveActive) {
+    if (rotateActive || moveActive || scaleActive) {
       mouseDown = true;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
@@ -79,6 +88,12 @@ document.addEventListener("DOMContentLoaded", function () {
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
       renderer.translatePolygon(deltaX, deltaY);
+    } else if (scaleActive && mouseDown) {
+      const deltaX = (event.clientX - lastMouseX) * scaleSpeed;
+      const deltaY = (event.clientY - lastMouseY) * scaleSpeed;
+      lastMouseX = event.clientX;
+      lastMouseY = event.clientY;
+      renderer.scalePolygon(deltaX, deltaY, lastMouseX, lastMouseY);
     }
   });
 

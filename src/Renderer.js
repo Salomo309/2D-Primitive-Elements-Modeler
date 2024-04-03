@@ -184,6 +184,14 @@ class Renderer{
             this.draw();
         }
     }
+
+    scalePolygon(deltaX, deltaY, lastMouseX, lastMouseY) {
+        const polygon = this.shapes.find(shape => shape instanceof Polygon);
+        if (polygon) {
+            polygon.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY);
+            this.draw();
+        }
+    }    
 }
 
 
