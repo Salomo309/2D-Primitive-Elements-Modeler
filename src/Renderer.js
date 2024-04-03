@@ -168,6 +168,14 @@ class Renderer{
         this.draw();
     }
 
+    rotatePolygon(angle) {
+        const polygon = this.shapes.find(shape => shape instanceof Polygon);
+        if (polygon) {
+            const midPoint = polygon.uniform.midPoint;
+            polygon.rotate(midPoint.coor[0], midPoint.coor[1], angle);
+            this.draw();
+        }
+    }
 }
 
 
