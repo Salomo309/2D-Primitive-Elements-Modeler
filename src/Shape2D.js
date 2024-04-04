@@ -60,11 +60,15 @@ class Shape2D{
         gl.drawElements(gl.TRIANGLES, this.getIndices().length, gl.UNSIGNED_SHORT,0);
     }
 
-    translate(deltaX,deltaY){
-        this.vertices.vertices.forEach(point=>{
-            point.move(deltaX,deltaX)
-        })
-        this.uniform.midPoint.move(deltaX,deltaY)
+    /**
+     * @param {Number} deltaX - Amount of translation along the x-axis
+     * @param {Number} deltaY - Amount of translation along the y-axis
+     */
+    translate(deltaX, deltaY) {
+        const vertices = this.vertices.vertices;
+        vertices.forEach(point => {
+            point.setCoordinates(point.coor[0] + deltaX, point.coor[1] + deltaY);
+        });
     }
 
     rotate(pivotX, pivotY, angle){

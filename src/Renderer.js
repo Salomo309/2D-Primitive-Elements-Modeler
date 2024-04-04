@@ -193,10 +193,26 @@ class Renderer{
         }
     }
 
-    translateLine(deltaX, deltaY, selectedObjectId) {
-        const line = this.shapes.find(shape => shape.id === selectedObjectId);
-        if (line) {
-            line.translate(deltaX, deltaY);
+    translateShape(deltaX, deltaY, selectedObjectId) {
+        const shape = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (shape) {
+            shape.translate(deltaX, deltaY);
+            this.draw();
+        }
+    }
+
+    translateSquare(deltaX, deltaY, selectedObjectId) {
+        const square = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (square) {
+            square.translate(deltaX, deltaY);
+            this.draw();
+        }
+    }
+
+    translateRectangle(deltaX, deltaY, selectedObjectId) {
+        const rectangle = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (rectangle) {
+            rectangle.translate(deltaX, deltaY);
             this.draw();
         }
     }

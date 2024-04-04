@@ -95,19 +95,6 @@ class Polygon extends Shape2D {
         lastMouseX += deltaX;
         lastMouseY += deltaY;
     }
-    
-
-    /**
-     * Translates the polygon by the specified amounts along the x and y axes.
-     * @param {Number} deltaX - Amount of translation along the x-axis
-     * @param {Number} deltaY - Amount of translation along the y-axis
-     */
-    translate(deltaX, deltaY) {
-        const vertices = this.vertices.vertices;
-        vertices.forEach(point => {
-            point.setCoordinates(point.coor[0] + deltaX, point.coor[1] + deltaY);
-        });
-    }
 
     /**
      * Scales the polygon by the specified factor.

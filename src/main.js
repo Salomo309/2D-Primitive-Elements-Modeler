@@ -83,16 +83,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function callTranslateOperation(deltaX, deltaY, selectedObjectId) {
     const selectedShape = renderer.getShapeById(selectedObjectId);
-    if (!selectedShape) return;
-
-    if (selectedShape instanceof Line) {
-      renderer.translateLine(deltaX, deltaY, selectedObjectId);
-    } else if (selectedShape instanceof Square) {
-      renderer.translateSquare(deltaX, deltaY, selectedObjectId);
-    } else if (selectedShape instanceof Rectangle) {
-      renderer.translateRectangle(deltaX, deltaY, selectedObjectId);
-    } else if (selectedShape instanceof Polygon) {
-      renderer.translatePolygon(deltaX, deltaY, selectedObjectId);
+    if (selectedShape) {
+      renderer.translateShape(deltaX, deltaY, selectedObjectId);
+    } else {
+      return;
     }
   }
 

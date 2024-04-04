@@ -84,19 +84,6 @@ class Line extends Shape2D {
     }
 
     /**
-     * Translasi garis berdasarkan pergeseran pada sumbu x dan y.
-     * @param {Number} deltaX - Pergeseran (translasi) pada sumbu x.
-     * @param {Number} deltaY - Pergeseran (translasi) pada sumbu y.
-     */
-    translate(deltaX, deltaY) {
-        const vertices = this.vertices.vertices;
-
-        vertices.forEach(point => {
-            point.setCoordinates(point.coor[0] + deltaX, point.coor[1] + deltaY);
-        });
-    }
-
-    /**
      * Shears the polygon along the x or y axis by the specified factors.
      * @param {Number} shearX - Shear factor along the x-axis
      * @param {Number} shearY - Shear factor along the y-axis
