@@ -97,10 +97,9 @@ class Shape2D{
 
     }
 
-    scale(scale){
-
-            const scaler = new Scaler();
-            scaler.resize(scale, this);
+    scale(scale) {
+        const scaler = new Scaler();
+        scaler.resize(scale, this);
     }
 
     scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {

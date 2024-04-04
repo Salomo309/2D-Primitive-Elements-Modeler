@@ -64,26 +64,6 @@ class Line extends Shape2D {
     }
 
     /**
-     * Penskalaan garis berdasarkan faktor penskalaan untuk sumbu x dan y.
-     * @param {Number} scaleX - Faktor penskalaan untuk sumbu x.
-     * @param {Number} scaleY - Faktor penskalaan untuk sumbu y.
-     */
-    scale(scale) {
-        const scaler = new Scaler();
-        scaler.resize(scale, this);
-    }
-
-    scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {
-        const pivotX = this.uniform.midPoint.coor[0];
-        const pivotY = this.uniform.midPoint.coor[1];
-    
-        const initialDistance = Math.sqrt((lastMouseX - pivotX) ** 2 + (lastMouseY - pivotY) ** 2);
-        const currentDistance = Math.sqrt((lastMouseX + deltaX - pivotX) ** 2 + (lastMouseY + deltaY - pivotY) ** 2);
-        const scale = currentDistance / initialDistance;
-        this.scale(scale);
-    }
-
-    /**
      * Shears the polygon along the x or y axis by the specified factors.
      * @param {Number} shearX - Shear factor along the x-axis
      * @param {Number} shearY - Shear factor along the y-axis
