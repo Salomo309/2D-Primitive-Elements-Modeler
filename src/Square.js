@@ -20,7 +20,7 @@ class Square extends Shape2D{
         ), 
             4,
             [0,1,2, 2,3,0],
-            new Uniforms(new Point(x,y), color))
+            new Uniforms(new Point([x,y],color)))
         
     }
     /**

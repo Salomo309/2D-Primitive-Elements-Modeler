@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   rectangleBtn.addEventListener("click", function () {
-    const rectangle = new Rectangle(1.5, 1, 0.1, 0, "00FF00");
+    const rectangle = new Rectangle(1.5, 1, 0, 0, "00FF00");
     renderer.addShape(rectangle);
     updateObjectDropdown(rectangle.id);
   });
@@ -73,9 +73,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (selectedShape instanceof Line) {
       renderer.rotateLine(deltaX, deltaY, selectedObjectId);
     } else if (selectedShape instanceof Square) {
-      renderer.rotateSquare(deltaX, deltaY, selectedObjectId);
+      renderer.rotate(deltaX, deltaY, selectedObjectId);
     } else if (selectedShape instanceof Rectangle) {
-      renderer.rotateRectangle(deltaX, deltaY, selectedObjectId);
+      renderer.rotate(deltaX, deltaY, selectedObjectId);
     } else if (selectedShape instanceof Polygon) {
       renderer.rotatePolygon(deltaX, deltaY, selectedObjectId);
     }

@@ -130,7 +130,7 @@ class Shape2D{
  */
 class Vertices{
     /**
-     * @param {Number[]} vertices
+     * @param {Point[]} vertices
      * @param {String} hex
      */
     constructor(vertices, hex){
@@ -165,6 +165,10 @@ class Vertices{
         this.vertices.forEach(point =>{
             point.move(x,y)
         })
+    }
+
+    getPoint(i){
+        return this.vertices[i]
     }
 
 
@@ -273,9 +277,19 @@ class Orientation{
         let sin = Math.sin(angle);
 
         return new Float32Array([
+            cos, -sin,
+            sin, cos
+        ]);
+    }
+    createInverseMatrix(){
+        let angle = this.degree*Math.PI/180;
+        let cos = Math.cos(angle);
+        let sin = Math.sin(angle);
+
+        return new Float32Array([
             cos, sin,
             -sin, cos
-        ]);
+        ]);        
     }
 
 
