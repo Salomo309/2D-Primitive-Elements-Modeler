@@ -25,45 +25,6 @@ class Line extends Shape2D {
     }
 
     /**
-     * Rotasi garis berdasarkan titik pivot dan sudut rotasi (dalam derajat).
-     * @param {Number} pivotX - Koordinat x titik pivot.
-     * @param {Number} pivotY - Koordinat y titik pivot.
-     * @param {Number} angle - Sudut rotasi (dalam derajat).
-     */
-    rotate(pivotX, pivotY, angle) {
-        // Pivot Point
-        const pivot = new Point([pivotX, pivotY], Color.fromHex(this.color));
-
-        // Orientation, then Rotate
-        const orientation = new Orientation();
-        orientation.rotate(angle);
-
-        // Matrix Rotation
-        const rotationMatrix = orientation.createMatrix();
-
-        // Rotate every point
-        const vertices = this.vertices.vertices;
-        for (let i = 0; i < vertices.length; i++) {
-            const x = vertices[i].getVertex()[0];
-            const y = vertices[i].getVertex()[1];
-
-
-            // Koordinat Relatif terhadap Pivot
-            const relativeX = x - pivotX;
-            const relativeY = y - pivotY;
-
-            // Matriks rotasi dikalikan ke relatif
-            const rotatedX = rotationMatrix[0] * relativeX + rotationMatrix[1] * relativeY;
-            const rotatedY = rotationMatrix[2] * relativeX + rotationMatrix[3] * relativeY;
-
-            vertices[i].setCoordinates(rotatedX + pivotX, rotatedY + pivotY)
-        }
-
-        this.uniform.rotation = orientation;
-        this.uniform.midPoint = pivot;
-    }
-
-    /**
      * Shears the polygon along the x or y axis by the specified factors.
      * @param {Number} shearX - Shear factor along the x-axis
      * @param {Number} shearY - Shear factor along the y-axis

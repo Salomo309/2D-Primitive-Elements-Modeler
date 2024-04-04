@@ -68,16 +68,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function callRotateOperation(deltaX, deltaY, selectedObjectId) {
     const selectedShape = renderer.getShapeById(selectedObjectId);
-    if (!selectedShape) return;
-
-    if (selectedShape instanceof Line) {
-      renderer.rotateLine(deltaX, deltaY, selectedObjectId);
-    } else if (selectedShape instanceof Square) {
-      renderer.rotate(deltaX, deltaY, selectedObjectId);
-    } else if (selectedShape instanceof Rectangle) {
-      renderer.rotate(deltaX, deltaY, selectedObjectId);
-    } else if (selectedShape instanceof Polygon) {
-      renderer.rotatePolygon(deltaX, deltaY, selectedObjectId);
+    if (selectedShape) {
+      const angle = Math.atan2(deltaY, deltaX);
+      const angleDegrees = angle * (180 / Math.PI) * rotateSpeed;
+      renderer.rotateShape(angleDegrees, selectedObjectId);
+    } else {
+      return;
     }
   }
 
@@ -132,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let mouseDown = false;
   let lastMouseX = 0;
   let lastMouseY = 0;
+  const rotateSpeed = 0.05;
   const moveSpeed = 0.005;
   const scaleSpeed = 5;
 
@@ -149,8 +146,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   renderer.canvas.addEventListener("mousemove", function (event) {
     if (rotateActive && mouseDown) {
-      const deltaX = event.clientX - lastMouseX;
-      const deltaY = event.clientY - lastMouseY;
+      const deltaX = (event.clientX - lastMouseX) * -1;
+      const deltaY = (event.clientY - lastMouseY) * -1;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
       callRotateOperation(deltaX, deltaY, objectDropdown.value);

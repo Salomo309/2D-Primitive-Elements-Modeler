@@ -175,25 +175,14 @@ class Renderer{
         return this.shapes.find(shape => shape.id === id);
     }
 
-    rotateLine(angle, selectedObjectId) {
-        const line = this.shapes.find(shape => shape instanceof Line);
-        if (line) {
-            const midPoint = line.uniform.midPoint;
-            line.rotate(midPoint.coor[0], midPoint.coor[1], angle);
+    rotateShape(angle, selectedObjectId) {
+        const shape = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (shape) {
+            const midPoint = shape.uniform.midPoint;
+            shape.rotate(midPoint.coor[0], midPoint.coor[1], angle);
             this.draw();
         }
     }
-
-    rotatePolygon(angle, selectedObjectId) {
-        const polygon = this.shapes.find(shape => shape instanceof Polygon);
-        if (polygon) {
-            const midPoint = polygon.uniform.midPoint;
-            polygon.rotate(midPoint.coor[0], midPoint.coor[1], angle);
-            this.draw();
-        }
-    }
-
-    
 
     translateShape(deltaX, deltaY, selectedObjectId) {
         const shape = this.shapes.find(shape => shape.id === selectedObjectId);
@@ -207,23 +196,6 @@ class Renderer{
         const shape = this.shapes.find(shape => shape.id === selectedObjectId);
         if (shape) {
             shape.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY);
-            this.draw();
-        }
-    }    
-
-    scaleRectangle(deltaX, deltaY, lastMouseX, lastMouseY, selectedObjectId){
-        const rectangle = this.shapes.find(shape=>shape.id === selectedObjectId);
-        
-        if(rectangle){
-            rectangle.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY)
-            this.draw()
-        }
-    }
-    rotate(angle, selectedObjectId){
-        const selectedShape = this.shapes.find(shape => shape.id===selectedObjectId);
-        if (selectedShape) {
-            const midPoint = selectedShape.uniform.midPoint;
-            selectedShape.rotate(midPoint.coor[0], midPoint.coor[1], angle);
             this.draw();
         }
     }
