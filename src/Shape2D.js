@@ -101,6 +101,7 @@ class Shape2D{
     scale(scale) {
         const scaler = new Scaler();
         scaler.resize(scale, this);
+        this.updateMidPoint()
     }
 
     scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {
