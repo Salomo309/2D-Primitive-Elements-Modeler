@@ -193,6 +193,8 @@ class Renderer{
         }
     }
 
+    
+
     translateShape(deltaX, deltaY, selectedObjectId) {
         const shape = this.shapes.find(shape => shape.id === selectedObjectId);
         if (shape) {
@@ -205,6 +207,23 @@ class Renderer{
         const shape = this.shapes.find(shape => shape.id === selectedObjectId);
         if (shape) {
             shape.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY);
+            this.draw();
+        }
+    }    
+
+    scaleRectangle(deltaX, deltaY, lastMouseX, lastMouseY, selectedObjectId){
+        const rectangle = this.shapes.find(shape=>shape.id === selectedObjectId);
+        
+        if(rectangle){
+            rectangle.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY)
+            this.draw()
+        }
+    }
+    rotate(angle, selectedObjectId){
+        const selectedShape = this.shapes.find(shape => shape.id===selectedObjectId);
+        if (selectedShape) {
+            const midPoint = selectedShape.uniform.midPoint;
+            selectedShape.rotate(midPoint.coor[0], midPoint.coor[1], angle);
             this.draw();
         }
     }
