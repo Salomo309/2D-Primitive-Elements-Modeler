@@ -99,7 +99,7 @@ class Shape2D{
 
     scale(scale){
         // Ambil semua titik dari objek shape
-        const vertices = shape.vertices.vertices;
+        const vertices = this.vertices.vertices;
 
         // Iterasi melalui setiap titik dan sesuaikan koordinatnya dengan faktor penskalaan
         vertices.forEach(point => {
@@ -111,6 +111,16 @@ class Shape2D{
             point.coor[1] = y * scale;
         });
         this.uniform.midPoint.coor = this.uniform.midPoint.scale(scale)
+    }
+
+    scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {
+        const pivotX = this.uniform.midPoint.coor[0];
+        const pivotY = this.uniform.midPoint.coor[1];
+    
+        const initialDistance = Math.sqrt((lastMouseX - pivotX) ** 2 + (lastMouseY - pivotY) ** 2);
+        const currentDistance = Math.sqrt((lastMouseX + deltaX - pivotX) ** 2 + (lastMouseY + deltaY - pivotY) ** 2);
+        const scale = currentDistance / initialDistance;
+        this.scale(scale);
     }
 
     changePointColor(pointIndex, newColorHex) {

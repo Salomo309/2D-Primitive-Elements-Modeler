@@ -201,45 +201,13 @@ class Renderer{
         }
     }
 
-    translateSquare(deltaX, deltaY, selectedObjectId) {
-        const square = this.shapes.find(shape => shape.id === selectedObjectId);
-        if (square) {
-            square.translate(deltaX, deltaY);
+    scaleShape(deltaX, deltaY, lastMouseX, lastMouseY, selectedObjectId) {
+        const shape = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (shape) {
+            shape.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY);
             this.draw();
         }
     }
-
-    translateRectangle(deltaX, deltaY, selectedObjectId) {
-        const rectangle = this.shapes.find(shape => shape.id === selectedObjectId);
-        if (rectangle) {
-            rectangle.translate(deltaX, deltaY);
-            this.draw();
-        }
-    }
-
-    translatePolygon(deltaX, deltaY, selectedObjectId) {
-        const polygon = this.shapes.find(shape => shape.id === selectedObjectId);
-        if (polygon) {
-            polygon.translate(deltaX, deltaY);
-            this.draw();
-        }
-    }
-
-    scaleLine(deltaX, deltaY, lastMouseX, lastMouseY, selectedObjectId) {
-        const line = this.shapes.find(shape => shape.id === selectedObjectId);
-        if (line) {
-            line.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY);
-            this.draw();
-        }
-    }    
-
-    scalePolygon(deltaX, deltaY, lastMouseX, lastMouseY, selectedObjectId) {
-        const polygon = this.shapes.find(shape => shape.id === selectedObjectId);
-        if (polygon) {
-            polygon.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY);
-            this.draw();
-        }
-    }    
 }
 
 

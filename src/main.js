@@ -98,40 +98,16 @@ document.addEventListener("DOMContentLoaded", function () {
     selectedObjectId
   ) {
     const selectedShape = renderer.getShapeById(selectedObjectId);
-    if (!selectedShape) return;
-
-    if (selectedShape instanceof Line) {
-      renderer.scaleLine(
+    if (selectedShape) {
+      renderer.scaleShape(
         deltaX,
         deltaY,
         lastMouseX,
         lastMouseY,
         selectedObjectId
       );
-    } else if (selectedShape instanceof Square) {
-      renderer.scaleSquare(
-        deltaX,
-        deltaY,
-        lastMouseX,
-        lastMouseY,
-        selectedObjectId
-      );
-    } else if (selectedShape instanceof Rectangle) {
-      renderer.scaleRectangle(
-        deltaX,
-        deltaY,
-        lastMouseX,
-        lastMouseY,
-        selectedObjectId
-      );
-    } else if (selectedShape instanceof Polygon) {
-      renderer.scalePolygon(
-        deltaX,
-        deltaY,
-        lastMouseX,
-        lastMouseY,
-        selectedObjectId
-      );
+    } else {
+      return;
     }
   }
 
