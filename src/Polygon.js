@@ -96,25 +96,6 @@ class Polygon extends Shape2D {
         lastMouseY += deltaY;
     }
 
-    /**
-     * Scales the polygon by the specified factor.
-     * @param {Number} scale - Scaling factor
-     */
-    scale(scale) {
-        const scaler = new Scaler();
-        scaler.resize(scale, this);
-    }
-
-    scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {
-        const pivotX = this.uniform.midPoint.coor[0];
-        const pivotY = this.uniform.midPoint.coor[1];
-    
-        const initialDistance = Math.sqrt((lastMouseX - pivotX) ** 2 + (lastMouseY - pivotY) ** 2);
-        const currentDistance = Math.sqrt((lastMouseX + deltaX - pivotX) ** 2 + (lastMouseY + deltaY - pivotY) ** 2);
-        const scale = currentDistance / initialDistance;
-        this.scale(scale);
-    }
-    
 
     /**
      * Shears the polygon along the x or y axis by the specified factors.
