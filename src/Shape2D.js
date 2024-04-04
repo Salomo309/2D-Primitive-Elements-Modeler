@@ -98,19 +98,9 @@ class Shape2D{
     }
 
     scale(scale){
-        // Ambil semua titik dari objek shape
-        const vertices = this.vertices.vertices;
 
-        // Iterasi melalui setiap titik dan sesuaikan koordinatnya dengan faktor penskalaan
-        vertices.forEach(point => {
-            const x = point.coor[0];
-            const y = point.coor[1];
-
-            // Terapkan faktor penskalaan pada setiap koordinat titik
-            point.coor[0] = x * scale;
-            point.coor[1] = y * scale;
-        });
-        this.uniform.midPoint.coor = this.uniform.midPoint.scale(scale)
+            const scaler = new Scaler();
+            scaler.resize(scale, this);
     }
 
     scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {
