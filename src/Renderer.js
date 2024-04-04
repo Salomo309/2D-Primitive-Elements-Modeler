@@ -175,11 +175,28 @@ class Renderer{
         return this.shapes.find(shape => shape.id === id);
     }
 
+    rotateLine(angle, selectedObjectId) {
+        const line = this.shapes.find(shape => shape instanceof Line);
+        if (line) {
+            const midPoint = line.uniform.midPoint;
+            line.rotate(midPoint.coor[0], midPoint.coor[1], angle);
+            this.draw();
+        }
+    }
+
     rotatePolygon(angle, selectedObjectId) {
         const polygon = this.shapes.find(shape => shape instanceof Polygon);
         if (polygon) {
             const midPoint = polygon.uniform.midPoint;
             polygon.rotate(midPoint.coor[0], midPoint.coor[1], angle);
+            this.draw();
+        }
+    }
+
+    translateLine(deltaX, deltaY, selectedObjectId) {
+        const line = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (line) {
+            line.translate(deltaX, deltaY);
             this.draw();
         }
     }
@@ -191,6 +208,14 @@ class Renderer{
             this.draw();
         }
     }
+
+    scaleLine(deltaX, deltaY, lastMouseX, lastMouseY, selectedObjectId) {
+        const line = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (line) {
+            line.scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY);
+            this.draw();
+        }
+    }    
 
     scalePolygon(deltaX, deltaY, lastMouseX, lastMouseY, selectedObjectId) {
         const polygon = this.shapes.find(shape => shape.id === selectedObjectId);

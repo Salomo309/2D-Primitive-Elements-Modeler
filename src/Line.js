@@ -73,6 +73,16 @@ class Line extends Shape2D {
         scaler.resize(scale, this);
     }
 
+    scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {
+        const pivotX = this.uniform.midPoint.coor[0];
+        const pivotY = this.uniform.midPoint.coor[1];
+    
+        const initialDistance = Math.sqrt((lastMouseX - pivotX) ** 2 + (lastMouseY - pivotY) ** 2);
+        const currentDistance = Math.sqrt((lastMouseX + deltaX - pivotX) ** 2 + (lastMouseY + deltaY - pivotY) ** 2);
+        const scale = currentDistance / initialDistance;
+        this.scale(scale);
+    }
+
     /**
      * Translasi garis berdasarkan pergeseran pada sumbu x dan y.
      * @param {Number} deltaX - Pergeseran (translasi) pada sumbu x.
