@@ -71,8 +71,10 @@ class Shape2D{
         });
     }
 
-    rotate(pivotX, pivotY, angle){
-        const pivot = new Point([pivotX, pivotY], this.color);
+    rotate(angle){
+        // const pivot = this.uniform.midPoint;
+        const pivotX = this.uniform.midPoint.coor[0]
+        const pivotY = this.uniform.midPoint.coor[1]
         const orientation = new Orientation();
         orientation.rotate(angle);
 
@@ -93,8 +95,6 @@ class Shape2D{
         }
 
         this.uniform.rotation = orientation;
-        this.uniform.midPoint = pivot;
-
     }
 
     scale(scale) {
@@ -105,7 +105,7 @@ class Shape2D{
     scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {
         const pivotX = this.uniform.midPoint.coor[0];
         const pivotY = this.uniform.midPoint.coor[1];
-    
+
         const initialDistance = Math.sqrt((lastMouseX - pivotX) ** 2 + (lastMouseY - pivotY) ** 2);
         const currentDistance = Math.sqrt((lastMouseX + deltaX - pivotX) ** 2 + (lastMouseY + deltaY - pivotY) ** 2);
         const scale = currentDistance / initialDistance;
@@ -289,7 +289,7 @@ class Orientation{
         return new Float32Array([
             cos, sin,
             -sin, cos
-        ]);        
+        ]);
     }
 
 
