@@ -68,33 +68,34 @@ class Shape2D{
         const vertices = this.vertices.vertices;
         vertices.forEach(point => {
             point.setCoordinates(point.coor[0] + deltaX, point.coor[1] + deltaY);
+            this.updateMidPoint()
         });
     }
 
     rotate(angle){
-        // const pivot = this.uniform.midPoint;
-        const pivotX = this.uniform.midPoint.coor[0]
-        const pivotY = this.uniform.midPoint.coor[1]
+        const pivot = this.uniform.midPoint;
+        console.log(pivot)
+        const pivotX = this.uniform.midPoint.coor[0];
+        const pivotY = this.uniform.midPoint.coor[1];
         const orientation = new Orientation();
         orientation.rotate(angle);
 
         const rotationMatrix = orientation.createMatrix();
+        console.log(rotationMatrix)
 
         const vertices = this.vertices.vertices;
         for (let i = 0; i < vertices.length; i++) {
-            const x = vertices[i].getVertex()[0];
-            const y = vertices[i].getVertex()[1];
+            const x = vertices[i].coor[0];
+            const y = vertices[i].coor[1];
 
-            const relativeX = x - pivotX;
-            const relativeY = y - pivotY;
+            const rotatedX = pivotX + (x - pivotX) * rotationMatrix[0] + (y - pivotY) * rotationMatrix[1];
+            const rotatedY = pivotY + (x - pivotX) * rotationMatrix[2] + (y - pivotY) * rotationMatrix[3];
 
-            const rotatedX = rotationMatrix[0] * relativeX + rotationMatrix[1] * relativeY;
-            const rotatedY = rotationMatrix[2] * relativeX + rotationMatrix[3] * relativeY;
-
-            vertices[i].setCoordinates(rotatedX + pivotX, rotatedY + pivotY);
+            vertices[i].setCoordinates(rotatedX, rotatedY);
         }
 
         this.uniform.rotation = orientation;
+        this.uniform.midPoint = pivot
     }
 
     scale(scale) {
@@ -120,6 +121,19 @@ class Shape2D{
         } else {
             console.error("Point index out of range.");
         }
+    }
+
+    updateMidPoint() {
+        let vertices = this.vertices.vertices;
+        let totalX = 0;
+        let totalY = 0;
+        for (let i = 0; i < vertices.length; i += 2) {
+            totalX += vertices[i].coor[0];
+            totalY += vertices[i].coor[1];
+        }
+        const midX = totalX / (vertices.length / 2);
+        const midY = totalY / (vertices.length / 2);
+        this.uniform.midPoint.setCoordinates(midX, midY);
     }
 
 }
