@@ -94,16 +94,21 @@ document.addEventListener("DOMContentLoaded", function () {
     selectedObjectId
   ) {
     const selectedShape = renderer.getShapeById(selectedObjectId);
-    if (selectedShape) {
-      renderer.scaleShape(
-        deltaX,
-        deltaY,
-        lastMouseX,
-        lastMouseY,
-        selectedObjectId
-      );
+    if (selectedShape instanceof Rectangle) {
+
+      renderer.scaleRectangle(deltaX,deltaY,lastMouseX,lastMouseY,selectedObjectId)
     } else {
-      return;
+      if(selectedShape){
+        renderer.scaleShape(
+          deltaX,
+          deltaY,
+          lastMouseX,
+          lastMouseY,
+          selectedObjectId
+        );
+      }else{
+        return
+      }
     }
   }
 
