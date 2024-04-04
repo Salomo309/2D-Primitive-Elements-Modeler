@@ -199,6 +199,21 @@ class Renderer{
             this.draw();
         }
     }
+
+    changePointColorShape(pointIndex, newColorHex, selectedObjectId) {
+        const shape = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (shape) {
+            shape.changePointColor(pointIndex, newColorHex.substring(1));
+            this.draw();
+        }
+    }
+
+    getPointColorShape(selectedObjectId, selectedPointIndex) {
+        const shape = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (shape) {
+            return shape.vertices.vertices[selectedPointIndex].color.toHex();
+        }
+    }
 }
 
 

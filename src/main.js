@@ -35,18 +35,44 @@ document.addEventListener("DOMContentLoaded", function () {
   clearBtn.addEventListener("click", function () {
     renderer.clearCanvas();
     clearObjectDropdown();
+    clearPointsDropdown();
   });
 
   function updateObjectDropdown(id) {
+    clearPointsDropdown();
     const dropdown = document.getElementById("objects-dropdown");
     const option = document.createElement("option");
     option.text = id;
     dropdown.insertBefore(option, dropdown.firstChild);
     dropdown.selectedIndex = 0;
+    populatePointsDropdown(id);
   }
 
   function clearObjectDropdown() {
     const dropdown = document.getElementById("objects-dropdown");
+    dropdown.innerHTML = "";
+  }
+
+  function populatePointsDropdown(selectedObjectId) {
+    const dropdown = document.getElementById("points-dropdown");
+    dropdown.innerHTML = "";
+
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+    if (selectedShape) {
+      const vertices = selectedShape.getVertices().length / 2;
+      console.log(vertices);
+      for (let i = 0; i < vertices; i++) {
+        const option = document.createElement("option");
+        option.text = `Point ${i + 1}`;
+        option.id = i;
+        dropdown.appendChild(option);
+      }
+    }
+    updateColorPicker();
+  }
+
+  function clearPointsDropdown() {
+    const dropdown = document.getElementById("points-dropdown");
     dropdown.innerHTML = "";
   }
 
@@ -56,6 +82,44 @@ document.addEventListener("DOMContentLoaded", function () {
   const rotateBtn = document.getElementById("rotate-btn");
   const moveBtn = document.getElementById("move-btn");
   const scaleBtn = document.getElementById("scale-btn");
+  const colorPicker = document.getElementById("color-picker");
+  const pointsDropdown = document.getElementById("points-dropdown");
+
+  function updateColorPicker() {
+    const dropdown = document.getElementById("points-dropdown");
+    const selectedOption = dropdown.options[dropdown.selectedIndex];
+    const selectedPointIndex = selectedOption.id;
+    const selectedObjectId = document.getElementById("objects-dropdown").value;
+    console.log(selectedPointIndex);
+    console.log(selectedObjectId);
+    const color = renderer.getPointColorShape(
+      selectedObjectId,
+      selectedPointIndex
+    );
+    console.log(color);
+    const colorPicker = document.getElementById("color-picker");
+    colorPicker.value = color;
+  }
+
+  pointsDropdown.addEventListener("change", function (event) {
+    updateColorPicker();
+  });
+
+  colorPicker.addEventListener("input", function (event) {
+    const selectedColor = event.target.value;
+    console.log("Selected Color:", selectedColor);
+    const selectedObjectId = document.getElementById("objects-dropdown").value;
+    const selectedPointIndex =
+      document.getElementById("points-dropdown").selectedIndex;
+
+    if (selectedObjectId && selectedPointIndex >= 0) {
+      renderer.changePointColorShape(
+        selectedPointIndex,
+        selectedColor,
+        selectedObjectId
+      );
+    }
+  });
 
   function deactivateAllButtons() {
     rotateActive = false;

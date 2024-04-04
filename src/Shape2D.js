@@ -271,6 +271,13 @@ class Color{
         this.blue/=255
     }
 
+    toHex() {
+        let redHex = Math.round(this.red * 255).toString(16).padStart(2, '0');
+        let greenHex = Math.round(this.green * 255).toString(16).padStart(2, '0');
+        let blueHex = Math.round(this.blue * 255).toString(16).padStart(2, '0');
+        return '#' + redHex + greenHex + blueHex;
+    }
+
 }
 
 // Attribute
