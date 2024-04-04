@@ -4,8 +4,8 @@
 //  * It also reduce the need to transpose matrix twice
 //  * @param {} mat1 size = 2x2
 //  * @param {*} mat2 size = 2xn
-//  * @param {*} n 
-//  * @param {*} m 
+//  * @param {*} n
+//  * @param {*} m
 //  * @returns {Number[]} size = 2xn
 //  */
 // function customMatMul(mat1, mat2, n){
@@ -90,7 +90,7 @@ class Shape2D{
 
         this.uniform.rotation = orientation;
         this.uniform.midPoint = pivot;
-        
+
     }
 
     scale(scale){
@@ -108,7 +108,17 @@ class Shape2D{
         });
         this.uniform.midPoint.coor = this.uniform.midPoint.scale(scale)
     }
-    
+
+    changePointColor(pointIndex, newColorHex) {
+        const vertices = this.vertices.vertices;
+
+        if (pointIndex >= 0 && pointIndex < vertices.length) {
+            vertices[pointIndex].color = Color.fromHex(newColorHex);
+        } else {
+            console.error("Point index out of range.");
+        }
+    }
+
 }
 
 /**
