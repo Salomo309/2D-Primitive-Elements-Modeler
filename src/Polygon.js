@@ -93,8 +93,8 @@ class Polygon extends Shape2D {
      * Removes the last vertex from the polygon.
      */
     removeVertex(index) {
-        const vertices = this.vertices;
-        const numVertices = vertices.length / 2;
+        const vertices = this.vertices.vertices;
+        const numVertices = vertices.length;
         const midPoint = this.uniform.midPoint;
 
         if (numVertices <= 3) {
