@@ -62,51 +62,67 @@ class Rectangle extends Shape2D{
         return new Rectangle(data.width, data.height, data.x, data.y, data.color);
     }
 
-    extendRectangleWidth(extensionAmount) {
-        let rotationAngle = this.uniform.rotation.degree;
-        console.log(this.uniform.midPoint)
-        let radians = rotationAngle * Math.PI / 180;
-        let cosTheta = Math.cos(radians);
-        let sinTheta = Math.sin(radians);
+    /**
+     * Scale the rectangle by a factor along its width
+     * @param {Number} scaleFactor - The scaling factor for the width
+     */
+    scaleByWidth(scaleFactor) {
+        const pivotX = this.uniform.midPoint.coor[0];
+        const pivotY = this.uniform.midPoint.coor[1];
+        const vertices = this.vertices.vertices;
 
-        // For each vertex of the rectangle
-        this.vertices.vertices.forEach(vertex=> {
-            let relativeX = vertex.coor[0] - this.uniform.midPoint.coor[0]
-            let relativeY = vertex.coor[1] - this.uniform.midPoint.coor[1]
-            let rotatedX = relativeX * cosTheta + relativeY * sinTheta;
-            let rotatedY = -relativeX * sinTheta + relativeY * cosTheta;
-
-            const offsetX = relativeX > 0 ? extensionAmount / 2 : -extensionAmount / 2;
-            const extendedX = rotatedX + offsetX;
-            const newX = this.uniform.midPoint.coor[0] + extendedX * cosTheta - rotatedY * sinTheta;
-            const newY = this.uniform.midPoint.coor[1] + extendedX * sinTheta + rotatedY * cosTheta;
-
-
-            vertex.coor[0] = newX;
-            vertex.coor[1] = newY;
-        }); 
-    }
-    extendRectangleHeight(extensionAmount) {
-        let rotationAngle = this.uniform.rotation.degree;
-        let radians = rotationAngle * Math.PI / 180;
-        let cosTheta = Math.cos(radians);
-        let sinTheta = Math.sin(radians);
-    
-        // For each vertex of the rectangle
-        this.vertices.vertices.forEach(vertex => {
-            let relativeX = vertex.coor[0] - this.uniform.midPoint.coor[0];
-            let relativeY = vertex.coor[1] - this.uniform.midPoint.coor[1];
-            let rotatedX = relativeX * cosTheta + relativeY * sinTheta;
-            let rotatedY = -relativeX * sinTheta + relativeY * cosTheta;
-    
-            const offsetY = relativeY > 0 ? extensionAmount / 2 : -extensionAmount / 2;
-            const extendedY = rotatedY + offsetY;
-            const newX = this.uniform.midPoint.coor[0] + rotatedX * cosTheta - extendedY * sinTheta;
-            const newY = this.uniform.midPoint.coor[1] + rotatedX * sinTheta + extendedY * cosTheta;
-    
-            vertex.coor[0] = newX;
-            vertex.coor[1] = newY;
+        // Iterate through each vertex of the rectangle
+        vertices.forEach(vertex => {
+            let relativeX = vertex.coor[0] - pivotX;
+            let relativeY = vertex.coor[1] - pivotY;
+            let newX = relativeX * scaleFactor + pivotX;
+            let newY = relativeY + pivotY;
+            vertex.setCoordinates(newX, newY);
         });
+
+        // Update the midPoint
+        this.updateMidPoint();
     }
 
+    /**
+     * Scale the rectangle by a factor along its height
+     * @param {Number} scaleFactor - The scaling factor for the height
+     */
+    scaleByHeight(scaleFactor) {
+        const pivotX = this.uniform.midPoint.coor[0];
+        const pivotY = this.uniform.midPoint.coor[1];
+        const vertices = this.vertices.vertices;
+
+        // Iterate through each vertex of the rectangle
+        vertices.forEach(vertex => {
+            let relativeX = vertex.coor[0] - pivotX;
+            let relativeY = vertex.coor[1] - pivotY;
+            let newX = relativeX + pivotX;
+            let newY = relativeY * scaleFactor + pivotY;
+            vertex.setCoordinates(newX, newY);
+        });
+
+        // Update the midPoint
+        this.updateMidPoint();
+    }
+
+    /**
+     * Method to change the width of the rectangle
+     * @param {Number} width - The new width of the rectangle
+     */
+    changeWidth(width) {
+        let currentWidth = this.getWidth();
+        let scaleFactor = width / currentWidth;
+        this.scaleByWidth(scaleFactor);
+    }
+
+    /**
+     * Method to change the height of the rectangle
+     * @param {Number} height - The new height of the rectangle
+     */
+    changeHeight(height) {
+        let currentHeight = this.getHeight();
+        let scaleFactor = height / currentHeight;
+        this.scaleByHeight(scaleFactor);
+    }
 }

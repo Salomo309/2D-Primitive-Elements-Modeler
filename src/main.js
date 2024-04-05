@@ -165,6 +165,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  widthSlider.addEventListener("input", function (event) {
+    const length = parseFloat(event.target.value);
+    console.log(length);
+    const selectedObjectId = document.getElementById("objects-dropdown").value;
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+
+    if (selectedShape instanceof Rectangle) {
+      selectedShape.changeWidth(length);
+      renderer.draw();
+    }
+  });
+
+  heightSlider.addEventListener("input", function (event) {
+    const length = parseFloat(event.target.value);
+    console.log(length);
+    const selectedObjectId = document.getElementById("objects-dropdown").value;
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+
+    if (selectedShape instanceof Rectangle) {
+      selectedShape.changeHeight(length);
+      renderer.draw();
+    }
+  });
+
   function updateObjectDropdown(id) {
     hideAllSliders();
     clearPointsDropdown();
