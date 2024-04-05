@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const lineBtn = document.getElementById("line-btn");
   const rectangleBtn = document.getElementById("rectangle-btn");
   const polygonBtn = document.getElementById("polygon-btn");
+  const convexhullBtn = document.getElementById("convexhull-btn");
   const clearBtn = document.getElementById("clear-btn");
   const exportBtn = document.getElementById("export-btn");
   const importForm = document.getElementById("import-form");
@@ -115,6 +116,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const polygon = new Polygon([0, 1, 0.86, -0.5, -0.86, -0.5], "FF0000");
     renderer.addShape(polygon);
     updateObjectDropdown(polygon.id);
+  });
+
+  convexhullBtn.addEventListener("click", function () {
+    const convexhull = new ConvexHull([-0.6, 0.8, 0.86, -0.5, -0.86, -0.5], "FFF000");
+    renderer.addShape(convexhull);
+    updateObjectDropdown(convexhull.id);
   });
 
   clearBtn.addEventListener("click", function () {
@@ -260,6 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const rotateBtn = document.getElementById("rotate-btn");
   const moveBtn = document.getElementById("move-btn");
   const scaleBtn = document.getElementById("scale-btn");
+  const movePointBtn = document.getElementById("movepoint-btn");
   const colorPicker = document.getElementById("color-picker");
   const addPointBtn = document.getElementById("addpoint-btn");
   const delPointBtn = document.getElementById("deletepoint-btn");
@@ -347,11 +355,13 @@ document.addEventListener("DOMContentLoaded", function () {
     rotateActive = false;
     moveActive = false;
     scaleActive = false;
+    movePointActive = false;
     addPointActive = false;
     delPointActive = false;
     rotateBtn.classList.remove("bg-green-700", "text-white");
     moveBtn.classList.remove("bg-green-700", "text-white");
     scaleBtn.classList.remove("bg-green-700", "text-white");
+    movePointBtn.classList.remove("bg-green-700", "text-white");
     addPointBtn.classList.remove("bg-green-700", "text-white");
     delPointBtn.classList.remove("bg-green-700", "text-white");
   }
@@ -424,6 +434,12 @@ document.addEventListener("DOMContentLoaded", function () {
     scaleBtn.classList.add("bg-green-700", "text-white");
   });
 
+  movePointBtn.addEventListener("click", function () {
+    deactivateAllButtons();
+    movePointActive = true;
+    movePointBtn.classList.add("bg-green-700", "text-white");
+  });
+
   addPointBtn.addEventListener("click", function () {
     deactivateAllButtons();
     addPointActive = true;
@@ -442,6 +458,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let scaleActive = false;
   let addPointActive = false;
   let delPointActive = false;
+  let movePointActive = false;
 
   renderer.canvas.addEventListener("mousedown", function (event) {
     if (
@@ -449,7 +466,8 @@ document.addEventListener("DOMContentLoaded", function () {
       moveActive ||
       scaleActive ||
       addPointActive ||
-      delPointActive
+      delPointActive ||
+      movePointActive
     ) {
       mouseDown = true;
       lastMouseX = event.clientX;

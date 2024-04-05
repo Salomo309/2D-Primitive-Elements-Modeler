@@ -7,6 +7,7 @@
     <script src="Rectangle.js"></script>
     <script src="Square.js"></script>
     <script src="Polygon.js"></script>
+    <script src="ConvexHull.js"></script>
     <script src="renderer.js"></script>
     <script src="main.js"></script>
     <script src="util.js"></script>
@@ -88,11 +89,14 @@
             </div>
 
             <h1 class="text-xl font-bold text-center mb-3">Point</h1>
-            <div class="flex justify-center items-center gap-2 mb-8">
+            <div class="flex flex-col justify-center items-center gap-2 mb-8">
                 <div class="relative">
                     <select id="delete-points-dropdown" class="border border-black py-1 px-4 rounded w-32">
                     </select>
                 </div>
+                <button id="movepoint-btn" class="border border-green-800 text-green-800 py-1 px-4 rounded">
+                    Move Point
+                </button>
             </div>
 
             <div class="mb-8">
@@ -125,7 +129,6 @@
                     <!-- No slider for Polygon -->
                 </div>
             </div>
-
 
             <h1 class="text-xl font-bold text-center mb-3">Point Color</h1>
             <div class="flex justify-center items-center gap-2 mb-8">
