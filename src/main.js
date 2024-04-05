@@ -169,7 +169,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedShape = renderer.getShapeById(selectedObjectId);
     if (selectedShape) {
       const vertices = selectedShape.getVertices().length / 2;
-      console.log(vertices);
       for (let i = 0; i < vertices; i++) {
         const option = document.createElement("option");
         option.text = `Point ${i + 1}`;
@@ -187,7 +186,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedShape = renderer.getShapeById(selectedObjectId);
     if (selectedShape) {
       const vertices = selectedShape.getVertices().length / 2;
-      console.log(vertices);
       for (let i = 0; i < vertices; i++) {
         const option = document.createElement("option");
         option.text = `Point ${i + 1}`;
@@ -225,13 +223,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedOption = dropdown.options[dropdown.selectedIndex];
     const selectedPointIndex = selectedOption.id;
     const selectedObjectId = document.getElementById("objects-dropdown").value;
-    console.log(selectedPointIndex);
-    console.log(selectedObjectId);
     const color = renderer.getPointColorShape(
       selectedObjectId,
       selectedPointIndex
     );
-    console.log(color);
     const colorPicker = document.getElementById("color-picker");
     colorPicker.value = color;
   }
@@ -253,6 +248,31 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedColor.substring(1),
         selectedObjectId
       );
+    }
+  });
+
+  delPointBtn.addEventListener("click", function () {
+    deactivateAllButtons();
+    delPointActive = true;
+
+    const selectedObjectId = document.getElementById("objects-dropdown").value;
+    const selectedPointIndex =
+      document.getElementById("points-dropdown").selectedIndex;
+
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+    const vertices = selectedShape.getVertices().length / 2;
+
+    if (selectedObjectId && selectedPointIndex >= 0 && vertices > 3) {
+      renderer.deletePoint(selectedPointIndex, selectedObjectId);
+      populateDeletePointsDropdown(
+        document.getElementById("objects-dropdown").value
+      );
+    } else {
+      if (vertices <= 3) {
+        alert("The number of points is less than or equal to 3.");
+      } else {
+        alert("Failed to Delete Point");
+      }
     }
   });
 
@@ -341,12 +361,6 @@ document.addEventListener("DOMContentLoaded", function () {
     deactivateAllButtons();
     addPointActive = true;
     addPointBtn.classList.add("bg-green-700", "text-white");
-  });
-
-  delPointBtn.addEventListener("click", function () {
-    deactivateAllButtons();
-    delPointActive = true;
-    delPointBtn.classList.add("bg-green-700", "text-white");
   });
 
   let mouseDown = false;

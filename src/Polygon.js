@@ -62,14 +62,11 @@ class Polygon extends Shape2D {
         // Sort vertices based on angles
         angles.sort((a, b) => a.angle - b.angle);
 
-        console.log(angles)
-
         // Rearrange vertices based on sorted indices
         const sortedVertices = [];
         angles.forEach(angle => {
             sortedVertices.push(vertices[angle.index]);
         });
-        console.log(sortedVertices)
 
         // Update vertices with sorted order
         for (let i = 0; i < vertices.length; i++) {
@@ -151,6 +148,7 @@ class Polygon extends Shape2D {
 
         // Update indices
         this.updateIndices();
+        console.log(this.vertices.vertices)
     }
 
     /**
