@@ -433,7 +433,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let mouseDown = false;
   let lastMouseX = 0;
   let lastMouseY = 0;
-  const rotateSpeed = 0.05;
+  const rotateSpeed = 0.0005;
   const moveSpeed = 0.005;
   const scaleSpeed = 5;
 
