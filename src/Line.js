@@ -9,6 +9,7 @@ class Line extends Shape2D {
     constructor(x1, y1, x2, y2, color) {
         const midPoint = new Point([(x1 + x2) / 2, (y1 + y2) / 2], Color.fromHex(color));
 
+
         super(
             new Vertices(
                 [
@@ -57,5 +58,16 @@ class Line extends Shape2D {
      */
     drawElements(gl) {
         gl.drawArrays(gl.LINES, 0, 2);
+    }
+
+    /**
+     * @override
+     */
+    updateMidPoint() {
+        const x1 = this.vertices.vertices[0].coor[0]
+        const x2 = this.vertices.vertices[1].coor[0]
+        const y1 = this.vertices.vertices[0].coor[1]
+        const y2 = this.vertices.vertices[1].coor[1]
+        this.uniform.midPoint = new Point([(x1 + x2) / 2, (y1 + y2) / 2], Color.fromHex(this.color));
     }
 }
