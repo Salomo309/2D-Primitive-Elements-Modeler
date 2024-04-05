@@ -1,23 +1,3 @@
-
-// /**
-//  * Custom matmul for coordinate matriks
-//  * It also reduce the need to transpose matrix twice
-//  * @param {} mat1 size = 2x2
-//  * @param {*} mat2 size = 2xn
-//  * @param {*} n
-//  * @param {*} m
-//  * @returns {Number[]} size = 2xn
-//  */
-// function customMatMul(mat1, mat2, n){
-//     let result = Array<Number>(n*2)
-
-//     for(let j=0;j<n;j+=2){
-//         result[j*2]=   mat1[0]*mat2[j] + mat1[1]*mat2[j+1]
-//         result[j*2+1] =  mat1[2]*mat2[j] + mat1[3]*mat2[j+1]
-//     }
-//     return result
-// }
-
 class Shape2D{
 
 
