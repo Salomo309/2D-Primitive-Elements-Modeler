@@ -85,6 +85,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       renderer.addShape(shape);
       updateObjectDropdown(shape.id);
+
+      shapeData.data.points.forEach((point, index) => {
+        renderer.changePointColorShape(index, point.color, shape.id);
+      });
     });
   }
 
@@ -199,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (selectedObjectId && selectedPointIndex >= 0) {
       renderer.changePointColorShape(
         selectedPointIndex,
-        selectedColor,
+        selectedColor.substring(1),
         selectedObjectId
       );
     }

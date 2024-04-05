@@ -203,7 +203,7 @@ class Renderer{
     changePointColorShape(pointIndex, newColorHex, selectedObjectId) {
         const shape = this.shapes.find(shape => shape.id === selectedObjectId);
         if (shape) {
-            shape.changePointColor(pointIndex, newColorHex.substring(1));
+            shape.changePointColor(pointIndex, newColorHex);
             this.draw();
         }
     }
