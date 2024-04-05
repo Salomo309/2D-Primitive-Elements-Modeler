@@ -204,6 +204,14 @@ class Vertices{
     getPoint(i){
         return this.vertices[i]
     }
+    
+    sortRadially(pivot) {
+        this.vertices.sort((a, b) => {
+            const angleA = Math.atan2(a.coor[1] - pivot.coor[1], a.coor[0] - pivot.coor[0]);
+            const angleB = Math.atan2(b.coor[1] - pivot.coor[1], b.coor[0] - pivot.coor[0]);
+            return angleA - angleB;
+        });
+    }
 
 
 }
