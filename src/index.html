@@ -89,23 +89,28 @@
                 <h1 class="text-xl font-bold text-center mb-3">Special Method</h1>
                 <div class="flex flex-col justify-center items-center gap-2" id="slider-container">
                     <!-- Slider for change length (for Line) -->
-                    <div id="length-slider-container">
-                        <label for="length-slider">Change Length:</label>
+                    <div id="length-slider-container" class="flex items-center slider-container hidden">
+                        <label for="length-slider" class="mr-3">Change Length:</label>
                         <input type="range" id="length-slider" name="length-slider" min="0" max="100" step="1"
                             value="50">
                     </div>
                     <!-- Slider for change size (for Square) -->
-                    <div id="size-slider-container">
-                        <label for="size-slider">Change Size:</label>
+                    <div id="size-slider-container" class="flex items-center slider-container hidden">
+                        <label for="size-slider" class="mr-3">Change Size: </label>
                         <input type="range" id="size-slider" name="size-slider" min="0" max="100" step="1" value="50">
                     </div>
                     <!-- Sliders for change width and height (for Rectangle) -->
-                    <div id="width-height-slider-container">
-                        <label for="width-slider">Change Width:</label>
-                        <input type="range" id="width-slider" name="width-slider" min="0" max="100" step="1" value="50">
-                        <label for="height-slider">Change Height:</label>
-                        <input type="range" id="height-slider" name="height-slider" min="0" max="100" step="1"
-                            value="50">
+                    <div id="width-height-slider-container" class="slider-container hidden">
+                        <div class="flex items-center">
+                            <label for="width-slider" class="mr-3">Change Width:</label>
+                            <input type="range" id="width-slider" name="width-slider" min="0" max="100" step="1"
+                                value="50">
+                        </div>
+                        <div class="flex items-center">
+                            <label for="height-slider" class="mr-3">Change Height:</label>
+                            <input type="range" id="height-slider" name="height-slider" min="0" max="100" step="1"
+                                value="50">
+                        </div>
                     </div>
                     <!-- No slider for Polygon -->
                 </div>

@@ -124,14 +124,15 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function showSlider(sliderId) {
-    console.log(sliderId);
     document.getElementById(sliderId).classList.remove("hidden");
   }
 
   function hideAllSliders() {
     const sliderContainers = document.querySelectorAll(".slider-container");
     sliderContainers.forEach((container) => {
-      container.classList.add("hidden");
+      if (!container.classList.contains("hidden")) {
+        container.classList.add("hidden");
+      }
     });
   }
 
