@@ -213,6 +213,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const pointsDropdown = document.getElementById("points-dropdown");
 
   objectDropdown.addEventListener("change", function (event) {
+    hideAllSliders();
+    
+    const selectedShape = renderer.getShapeById(document.getElementById("objects-dropdown").value);
+
+    if (selectedShape instanceof Line) {
+      showSlider("length-slider-container");
+    } else if (selectedShape instanceof Square) {
+      showSlider("size-slider-container");
+    } else if (selectedShape instanceof Rectangle) {
+      showSlider("width-height-slider-container");
+    }
     populatePointsDropdown(document.getElementById("objects-dropdown").value);
     populateDeletePointsDropdown(
       document.getElementById("objects-dropdown").value
