@@ -137,15 +137,30 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const lengthSlider = document.getElementById("length-slider");
+  const sizeSlider = document.getElementById("size-slider");
+  const widthSlider = document.getElementById("width-slider");
+  const heightSlider = document.getElementById("height-slider");
 
   lengthSlider.addEventListener("input", function (event) {
     const length = parseFloat(event.target.value);
-    console.log(length)
+    console.log(length);
     const selectedObjectId = document.getElementById("objects-dropdown").value;
     const selectedShape = renderer.getShapeById(selectedObjectId);
 
     if (selectedShape instanceof Line) {
       selectedShape.changeLength(length);
+      renderer.draw();
+    }
+  });
+
+  sizeSlider.addEventListener("input", function (event) {
+    const length = parseFloat(event.target.value);
+    console.log(length);
+    const selectedObjectId = document.getElementById("objects-dropdown").value;
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+
+    if (selectedShape instanceof Square) {
+      selectedShape.resize(length);
       renderer.draw();
     }
   });

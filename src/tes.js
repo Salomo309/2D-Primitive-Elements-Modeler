@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
         -0.1, -0.6    // Titik 4
     ], '#00ff00');
 
+    const square = new Square(1, 0, 0, "0000FF")
+    square.extendLength(-1)
+
 
     // polygon.addVertex(1, 1);
     // polygon.removeVertex();
@@ -39,5 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // renderer.addShape(line3);
     // renderer.addShape(line4);
     // renderer.addShape(line5);
-    renderer.addShape(polygon)
+    renderer.addShape(square)
+    // renderer.addShape(polygon)
 });

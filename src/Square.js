@@ -58,29 +58,15 @@ class Square extends Shape2D{
     static deserialize(data) {
         return new Square(data.size, data.x, data.y, data.color);
     }
-
-    extendLength(extensionAmount) {
-        let rotationAngle = this.uniform.rotation.degree;
-        let radians = rotationAngle * Math.PI / 180;
-        let cosTheta = Math.cos(radians);
-        let sinTheta = Math.sin(radians);
     
-        // For each vertex of the rectangle
-        this.vertices.vertices.forEach(vertex => {
-            let relativeX = vertex.coor[0] - this.uniform.midPoint.coor[0];
-            let relativeY = vertex.coor[1] - this.uniform.midPoint.coor[1];
-            let rotatedX = relativeX * cosTheta + relativeY * sinTheta;
-            let rotatedY = -relativeX * sinTheta + relativeY * cosTheta;
-    
-            const offsetY = relativeY > 0 ? extensionAmount / 2 : -extensionAmount / 2;
-            const offsetX = relativeX>0 ? extensionAmount/2 : -extensionAmount/2;
-            const extendedY = rotatedY + offsetY;
-            const extendedX = rotatedX+offsetX
-            const newX = this.uniform.midPoint.coor[0] + extendedX * cosTheta - extendedY * sinTheta;
-            const newY = this.uniform.midPoint.coor[1] + extendedX * sinTheta + extendedY * cosTheta;
-    
-            vertex.coor[0] = newX;
-            vertex.coor[1] = newY;
-        });
+    /**
+     * Method to resize the square to a new size
+     * @param {Number} size - The new size of the square
+     */
+    resize(size) {
+        let currentSize = this.getSize();
+        let scaleFactor = size / currentSize;
+        this.scale(scaleFactor);
     }
+    
 }
