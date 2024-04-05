@@ -136,6 +136,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  const lengthSlider = document.getElementById("length-slider");
+
+  lengthSlider.addEventListener("input", function (event) {
+    const length = parseFloat(event.target.value);
+    console.log(length)
+    const selectedObjectId = document.getElementById("objects-dropdown").value;
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+
+    if (selectedShape instanceof Line) {
+      selectedShape.changeLength(length);
+      renderer.draw();
+    }
+  });
+
   function updateObjectDropdown(id) {
     hideAllSliders();
     clearPointsDropdown();
@@ -214,8 +228,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   objectDropdown.addEventListener("change", function (event) {
     hideAllSliders();
-    
-    const selectedShape = renderer.getShapeById(document.getElementById("objects-dropdown").value);
+
+    const selectedShape = renderer.getShapeById(
+      document.getElementById("objects-dropdown").value
+    );
 
     if (selectedShape instanceof Line) {
       showSlider("length-slider-container");
