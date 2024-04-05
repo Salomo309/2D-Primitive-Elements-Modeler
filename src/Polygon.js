@@ -29,6 +29,7 @@ class Polygon extends Shape2D {
             new Uniforms(midPoint)
         );
         this.color = color
+        console.log(this.vertices)
     }
 
     /**
