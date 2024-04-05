@@ -1,12 +1,92 @@
 document.addEventListener("DOMContentLoaded", function () {
   var renderer = new Renderer("#canvas", document);
-  console.log("Succedd");
 
   const squareBtn = document.getElementById("square-btn");
   const lineBtn = document.getElementById("line-btn");
   const rectangleBtn = document.getElementById("rectangle-btn");
   const polygonBtn = document.getElementById("polygon-btn");
   const clearBtn = document.getElementById("clear-btn");
+  const importBtn = document.getElementById("import-btn");
+  const exportBtn = document.getElementById("export-btn");
+  const importForm = document.getElementById("import-form");
+  const fileInput = document.getElementById("file-input");
+
+  exportBtn.addEventListener("click", function () {
+    const modelData = gatherModelData();
+    const jsonData = JSON.stringify(modelData, null, 2);
+    const blob = new Blob([jsonData], { type: "text/plain" });
+
+    const a = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    a.href = url;
+    a.download = "draw.txt";
+    document.body.appendChild(a);
+
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  importForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const file = fileInput.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const fileContent = e.target.result;
+        try {
+          const jsonData = JSON.parse(fileContent);
+          recreateModel(jsonData);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
+      };
+
+      reader.readAsText(file);
+    }
+  });
+
+  function gatherModelData() {
+    const modelData = {
+      shapes: [],
+    };
+
+    renderer.shapes.forEach((shape) => {
+      const shapeData = {
+        type: shape.constructor.name,
+        id: shape.id,
+        data: shape.serialize(),
+      };
+      modelData.shapes.push(shapeData);
+    });
+
+    return modelData;
+  }
+
+  function recreateModel(modelData) {
+    renderer.clearCanvas();
+
+    modelData.shapes.forEach((shapeData) => {
+      let shape;
+      switch (shapeData.type) {
+        case "Line":
+          shape = Line.deserialize(shapeData.data);
+          break;
+        case "Square":
+          shape = Square.deserialize(shapeData.data);
+          break;
+        case "Rectangle":
+          shape = Rectangle.deserialize(shapeData.data);
+          break;
+        case "Polygon":
+          shape = Polygon.deserialize(shapeData.data);
+          break;
+      }
+
+      renderer.addShape(shape);
+    });
+  }
 
   lineBtn.addEventListener("click", function () {
     const line = new Line(0, 0, 0.8, 0.5, "FFFFFF");
