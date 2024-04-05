@@ -361,6 +361,23 @@ class Scaler{
         });
     }
 
+    resize(scale, shape, fixedPoint) {
+        // Ambil semua titik dari objek shape
+        const vertices = shape.vertices.vertices;
+
+        // Iterasi melalui setiap titik dan sesuaikan koordinatnya dengan faktor penskalaan
+        vertices.forEach(point => {
+            // Skip fixed point
+            if (point !== fixedPoint) {
+                const x = point.coor[0];
+                const y = point.coor[1];
+
+                // Terapkan faktor penskalaan pada setiap koordinat titik
+                point.coor[0] = x * scale;
+                point.coor[1] = y * scale;
+            }
+        });
+    }
 }
 
 //Attribute

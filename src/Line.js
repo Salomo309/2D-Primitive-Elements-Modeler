@@ -26,6 +26,23 @@ class Line extends Shape2D {
     }
 
     /**
+     * Move a single point in the line to a new position.
+     * @param {Number} newX - New x-coordinate for the point
+     * @param {Number} newY - New y-coordinate for the point
+     * @param {Number} pointIndex - Index of the point to move (0 or 1)
+     */
+    movePoint(newX, newY, pointIndex) {
+        if (pointIndex < 0 || pointIndex > 1) {
+            console.error("Point index must be 0 or 1.");
+            return;
+        }
+    
+        const vertices = this.vertices.vertices;
+        vertices[pointIndex].setCoordinates(newX, newY);
+        this.updateMidPoint();
+    }    
+
+    /**
      * Shears the polygon along the x or y axis by the specified factors.
      * @param {Number} shearX - Shear factor along the x-axis
      * @param {Number} shearY - Shear factor along the y-axis

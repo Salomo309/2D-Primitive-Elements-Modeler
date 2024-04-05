@@ -230,6 +230,14 @@ class Renderer{
             this.draw();
         }
     }
+
+    movePoint(newX, newY, pointIndex, selectedObjectId) {
+        const shape = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (shape instanceof Line) {
+            shape.movePoint(newX, newY, pointIndex);
+            this.draw();
+        }
+    }    
 }
 
 

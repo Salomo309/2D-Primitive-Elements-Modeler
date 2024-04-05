@@ -523,6 +523,21 @@ document.addEventListener("DOMContentLoaded", function () {
       populateDeletePointsDropdown(
         document.getElementById("objects-dropdown").value
       );
+    } else if (movePointActive) {
+      const rect = renderer.canvas.getBoundingClientRect();
+      const canvasWidth = renderer.canvas.width;
+      const canvasHeight = renderer.canvas.height;
+
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      const clipX = (mouseX / canvasWidth) * 2 - 1;
+      const clipY = ((canvasHeight - mouseY) / canvasHeight) * 2 - 1;
+
+      console.log("Clip X:", clipX);
+      console.log("Clip Y:", clipY);
+
+      renderer.movePoint(clipX, clipY, document.getElementById("delete-points-dropdown").value, objectDropdown.value);
     }
   });
 
