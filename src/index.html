@@ -85,6 +85,33 @@
                 </div>
             </div>
 
+            <div class="mb-8">
+                <h1 class="text-xl font-bold text-center mb-3">Special Method</h1>
+                <div class="flex flex-col justify-center items-center gap-2" id="slider-container">
+                    <!-- Slider for change length (for Line) -->
+                    <div id="length-slider-container">
+                        <label for="length-slider">Change Length:</label>
+                        <input type="range" id="length-slider" name="length-slider" min="0" max="100" step="1"
+                            value="50">
+                    </div>
+                    <!-- Slider for change size (for Square) -->
+                    <div id="size-slider-container">
+                        <label for="size-slider">Change Size:</label>
+                        <input type="range" id="size-slider" name="size-slider" min="0" max="100" step="1" value="50">
+                    </div>
+                    <!-- Sliders for change width and height (for Rectangle) -->
+                    <div id="width-height-slider-container">
+                        <label for="width-slider">Change Width:</label>
+                        <input type="range" id="width-slider" name="width-slider" min="0" max="100" step="1" value="50">
+                        <label for="height-slider">Change Height:</label>
+                        <input type="range" id="height-slider" name="height-slider" min="0" max="100" step="1"
+                            value="50">
+                    </div>
+                    <!-- No slider for Polygon -->
+                </div>
+            </div>
+
+
             <h1 class="text-xl font-bold text-center mb-3">Point Color</h1>
             <div class="flex justify-center items-center gap-2 mb-8">
                 <div class="relative">
@@ -95,13 +122,15 @@
             </div>
 
             <div class="mb-8">
-                <div class="flex justify-center items-center gap-2">
-                    <input type="file" id="file-input" class="border border-black py-1 px-4 rounded">
-                    <button id="import-btn"
-                        class="bg-blue-700 text-white active:bg-blue-400 active:text-white py-2 px-4 rounded">
-                        Import
-                    </button>
-                </div>
+                <form id="import-form" enctype="multipart/form-data">
+                    <div class="flex justify-center items-center gap-2">
+                        <input type="file" id="file-input" class="border border-black py-1 px-4 rounded">
+                        <button id="import-btn"
+                            class="bg-blue-700 text-white active:bg-blue-400 active:text-white py-2 px-4 rounded">
+                            Import
+                        </button>
+                    </div>
+                </form>
             </div>
 
 

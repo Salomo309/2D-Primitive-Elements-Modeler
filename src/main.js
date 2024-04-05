@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   var renderer = new Renderer("#canvas", document);
-  console.log("Succedd");
+  hideAllSliders();
 
   const squareBtn = document.getElementById("square-btn");
   const lineBtn = document.getElementById("line-btn");
@@ -27,25 +27,25 @@ document.addEventListener("DOMContentLoaded", function () {
     URL.revokeObjectURL(url);
   });
 
-  // importForm.addEventListener("submit", function (event) {
-  //   event.preventDefault();
-  //   const file = fileInput.files[0];
+  importForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const file = fileInput.files[0];
 
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = function (e) {
-  //       const fileContent = e.target.result;
-  //       try {
-  //         const jsonData = JSON.parse(fileContent);
-  //         recreateModel(jsonData);
-  //       } catch (error) {
-  //         console.error("Error parsing JSON:", error);
-  //       }
-  //     };
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const fileContent = e.target.result;
+        try {
+          const jsonData = JSON.parse(fileContent);
+          recreateModel(jsonData);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+        }
+      };
 
-  //     reader.readAsText(file);
-  //   }
-  // });
+      reader.readAsText(file);
+    }
+  });
 
   function gatherModelData() {
     const modelData = {
@@ -123,7 +123,20 @@ document.addEventListener("DOMContentLoaded", function () {
     clearPointsDropdown();
   });
 
+  function showSlider(sliderId) {
+    console.log(sliderId);
+    document.getElementById(sliderId).classList.remove("hidden");
+  }
+
+  function hideAllSliders() {
+    const sliderContainers = document.querySelectorAll(".slider-container");
+    sliderContainers.forEach((container) => {
+      container.classList.add("hidden");
+    });
+  }
+
   function updateObjectDropdown(id) {
+    hideAllSliders();
     clearPointsDropdown();
     const dropdown = document.getElementById("objects-dropdown");
     const option = document.createElement("option");
@@ -131,7 +144,17 @@ document.addEventListener("DOMContentLoaded", function () {
     dropdown.insertBefore(option, dropdown.firstChild);
     dropdown.selectedIndex = 0;
     populatePointsDropdown(id);
-    populateDeletePointsDropdown(id)
+    populateDeletePointsDropdown(id);
+
+    const selectedShape = renderer.getShapeById(id);
+
+    if (selectedShape instanceof Line) {
+      showSlider("length-slider-container");
+    } else if (selectedShape instanceof Square) {
+      showSlider("size-slider-container");
+    } else if (selectedShape instanceof Rectangle) {
+      showSlider("width-height-slider-container");
+    }
   }
 
   function clearObjectDropdown() {
@@ -192,7 +215,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   objectDropdown.addEventListener("change", function (event) {
     populatePointsDropdown(document.getElementById("objects-dropdown").value);
-    populateDeletePointsDropdown(document.getElementById("objects-dropdown").value)
+    populateDeletePointsDropdown(
+      document.getElementById("objects-dropdown").value
+    );
   });
 
   function updateColorPicker() {
@@ -230,8 +255,6 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     }
   });
-
-
 
   function deactivateAllButtons() {
     rotateActive = false;
@@ -287,18 +310,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function callAddPointOperation(
-    lastMouseX,
-    lastMouseY,
-    selectedObjectId
-  ) {
+  function callAddPointOperation(lastMouseX, lastMouseY, selectedObjectId) {
     const selectedShape = renderer.getShapeById(selectedObjectId);
     if (selectedShape) {
-      renderer.addPoint(
-        lastMouseX,
-        lastMouseY,
-        selectedObjectId
-      );
+      renderer.addPoint(lastMouseX, lastMouseY, selectedObjectId);
     } else {
       return;
     }
@@ -348,7 +363,13 @@ document.addEventListener("DOMContentLoaded", function () {
   let delPointActive = false;
 
   renderer.canvas.addEventListener("mousedown", function (event) {
-    if (rotateActive || moveActive || scaleActive || addPointActive || delPointActive) {
+    if (
+      rotateActive ||
+      moveActive ||
+      scaleActive ||
+      addPointActive ||
+      delPointActive
+    ) {
       mouseDown = true;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
@@ -363,7 +384,7 @@ document.addEventListener("DOMContentLoaded", function () {
       lastMouseY = event.clientY;
       callRotateOperation(deltaX, deltaY, objectDropdown.value);
     } else if (moveActive && mouseDown) {
-      console.log(event.clientX)
+      console.log(event.clientX);
       const deltaX = (event.clientX - lastMouseX) * moveSpeed;
       const deltaY = (event.clientY - lastMouseY) * moveSpeed * -1;
       lastMouseX = event.clientX;
@@ -384,23 +405,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  renderer.canvas.addEventListener("click", function(event) {
+  renderer.canvas.addEventListener("click", function (event) {
     if (addPointActive) {
       const rect = renderer.canvas.getBoundingClientRect();
-        const canvasWidth = renderer.canvas.width;
-        const canvasHeight = renderer.canvas.height;
+      const canvasWidth = renderer.canvas.width;
+      const canvasHeight = renderer.canvas.height;
 
-        const mouseX = event.clientX - rect.left;
-        const mouseY = event.clientY - rect.top;
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
 
-        const clipX = (mouseX / canvasWidth) * 2 - 1;
-        const clipY = ((canvasHeight - mouseY) / canvasHeight) * 2 - 1;
+      const clipX = (mouseX / canvasWidth) * 2 - 1;
+      const clipY = ((canvasHeight - mouseY) / canvasHeight) * 2 - 1;
 
-        console.log("Clip X:", clipX);
-        console.log("Clip Y:", clipY);
+      console.log("Clip X:", clipX);
+      console.log("Clip Y:", clipY);
 
-        callAddPointOperation(clipX, clipY, objectDropdown.value);
-        populateDeletePointsDropdown(document.getElementById("objects-dropdown").value)
+      callAddPointOperation(clipX, clipY, objectDropdown.value);
+      populateDeletePointsDropdown(
+        document.getElementById("objects-dropdown").value
+      );
     }
   });
 

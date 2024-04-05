@@ -180,7 +180,7 @@ class Polygon extends Shape2D {
      */
     serialize() {
         return {
-            type: 'Line',
+            type: 'Polygon',
             vertices: this.vertices.vertices,
             color: this.color,
             points: this.vertices.vertices.map(point => ({
