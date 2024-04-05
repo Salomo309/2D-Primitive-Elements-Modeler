@@ -60,6 +60,21 @@ class Line extends Shape2D {
         gl.drawArrays(gl.LINES, 0, 2);
     }
 
+    serialize() {
+        return {
+            type: 'Line',
+            points: this.vertices.vertices.map(point => ({
+                coor: point.getVertex(),
+                color: point.color.toHex().substring(1)
+            }))
+        };
+    }
+
+    static deserialize(data) {
+        const points = data.points.map(pointData => new Point(pointData.coor, Color.fromHex(pointData.color)));
+        return new Line(points[0].getVertex()[0], points[0].getVertex()[1], points[1].getVertex()[0], points[1].getVertex()[1], data.points[0].color);
+    }
+
     /**
      * @override
      */

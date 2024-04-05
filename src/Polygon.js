@@ -139,4 +139,25 @@ class Polygon extends Shape2D {
     drawElements(gl) {
         gl.drawElements(gl.TRIANGLES, this.getIndices().length, gl.UNSIGNED_SHORT, 0);
     }
+
+    /**
+     * Serialize the Polygon object.
+     * @returns {Object} Serialized Polygon object.
+     */
+    serialize() {
+        return {
+            type: 'Line',
+            vertices: this.vertices.vertices,
+            color: this.color,
+            points: this.vertices.vertices.map(point => ({
+                coor: point.getVertex(),
+                color: point.color.toHex().substring(1)
+            }))
+        };
+    }
+
+    static deserialize(data) {
+        const vertices = data.points.map(pointData => pointData.coor).flat();
+        return new Polygon(vertices, data.color);
+    }
 }
