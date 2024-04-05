@@ -217,7 +217,7 @@ class Renderer{
 
     addPoint(newPointX, newPointY, selectedObjectId) {
         const shape = this.shapes.find(shape => shape.id === selectedObjectId);
-        if (shape instanceof Polygon || shape instanceof Polygon) {
+        if (shape instanceof Polygon || shape instanceof ConvexHull) {
             shape.addVertex(newPointX, newPointY);
             this.draw();
         }
@@ -225,7 +225,7 @@ class Renderer{
 
     deletePoint(pointIndex, selectedObjectId) {
         const shape = this.shapes.find(shape => shape.id === selectedObjectId);
-        if (shape instanceof Polygon || shape instanceof Polygon) {
+        if (shape instanceof Polygon || shape instanceof ConvexHull) {
             shape.removeVertex(pointIndex)
             this.draw();
         }
