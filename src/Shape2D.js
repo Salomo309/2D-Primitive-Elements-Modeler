@@ -66,22 +66,30 @@ class Shape2D{
      */
     translate(deltaX, deltaY) {
         const vertices = this.vertices.vertices;
+        console.log("MidPointX = "+this.uniform.midPoint.coor[0])
+        console.log("MidPointY = "+this.uniform.midPoint.coor[1])
         vertices.forEach(point => {
+            console.log("Before translate: "+point.coor)
             point.setCoordinates(point.coor[0] + deltaX, point.coor[1] + deltaY);
-            this.updateMidPoint()
+            console.log("After translate: "+point.coor)
         });
+        this.updateMidPoint()
+        console.log("MidPointX = "+this.uniform.midPoint.coor[0])
+        console.log("MidPointY = "+this.uniform.midPoint.coor[1])
     }
 
     rotate(angle){
         const pivot = this.uniform.midPoint;
-        console.log(pivot)
+        console.log("PivotX = "+pivot.coor[0])
+        console.log("PivotY = "+pivot.coor[1])
         const pivotX = this.uniform.midPoint.coor[0];
         const pivotY = this.uniform.midPoint.coor[1];
+
         const orientation = new Orientation();
+        orientation.degree = this.uniform.rotation.degree;
         orientation.rotate(angle);
 
         const rotationMatrix = orientation.createMatrix();
-        console.log(rotationMatrix)
 
         const vertices = this.vertices.vertices;
         for (let i = 0; i < vertices.length; i++) {
@@ -92,16 +100,23 @@ class Shape2D{
             const rotatedY = pivotY + (x - pivotX) * rotationMatrix[2] + (y - pivotY) * rotationMatrix[3];
 
             vertices[i].setCoordinates(rotatedX, rotatedY);
+            console.log(vertices[i])
         }
 
         this.uniform.rotation = orientation;
-        this.uniform.midPoint = pivot
+        // this.updateMidPoint()
+        console.log("MidPointX = "+this.uniform.midPoint.coor[0])
+        console.log("MidPointY = "+this.uniform.midPoint.coor[1])
     }
 
     scale(scale) {
         const scaler = new Scaler();
         scaler.resize(scale, this);
+        console.log("MidPointX = "+this.uniform.midPoint.coor[0])
+        console.log("MidPointY = "+this.uniform.midPoint.coor[1])
         this.updateMidPoint()
+        console.log("MidPointX = "+this.uniform.midPoint.coor[0])
+        console.log("MidPointY = "+this.uniform.midPoint.coor[1])
     }
 
     scaleByMouse(deltaX, deltaY, lastMouseX, lastMouseY) {
@@ -112,6 +127,8 @@ class Shape2D{
         const currentDistance = Math.sqrt((lastMouseX + deltaX - pivotX) ** 2 + (lastMouseY + deltaY - pivotY) ** 2);
         const scale = currentDistance / initialDistance;
         this.scale(scale);
+        console.log("MidPointX = "+this.uniform.midPoint.coor[0])
+        console.log("MidPointY = "+this.uniform.midPoint.coor[1])
     }
 
     changePointColor(pointIndex, newColorHex) {
@@ -126,14 +143,16 @@ class Shape2D{
 
     updateMidPoint() {
         let vertices = this.vertices.vertices;
+        console.log(vertices)
         let totalX = 0;
         let totalY = 0;
-        for (let i = 0; i < vertices.length; i += 2) {
+        for (let i = 0; i < vertices.length; i++) {
             totalX += vertices[i].coor[0];
             totalY += vertices[i].coor[1];
+            console.log(totalX)
         }
-        const midX = totalX / (vertices.length / 2);
-        const midY = totalY / (vertices.length / 2);
+        const midX = totalX / (vertices.length);
+        const midY = totalY / (vertices.length);
         this.uniform.midPoint.setCoordinates(midX, midY);
     }
 
@@ -361,6 +380,7 @@ class Shear{
 class Uniforms{
     constructor(point){
         this.rotation = new Orientation()
+        this.rotation.degree = 0
         this.shear = new Shear()
         this.midPoint = point
     }
