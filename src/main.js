@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const rectangleBtn = document.getElementById("rectangle-btn");
   const polygonBtn = document.getElementById("polygon-btn");
   const clearBtn = document.getElementById("clear-btn");
-  const importBtn = document.getElementById("import-btn");
   const exportBtn = document.getElementById("export-btn");
   const importForm = document.getElementById("import-form");
   const fileInput = document.getElementById("file-input");
@@ -85,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       renderer.addShape(shape);
+      updateObjectDropdown(shape.id);
     });
   }
 
@@ -164,6 +164,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const scaleBtn = document.getElementById("scale-btn");
   const colorPicker = document.getElementById("color-picker");
   const pointsDropdown = document.getElementById("points-dropdown");
+
+  objectDropdown.addEventListener("change", function (event) {
+    populatePointsDropdown(document.getElementById("objects-dropdown").value);
+  });
 
   function updateColorPicker() {
     const dropdown = document.getElementById("points-dropdown");
