@@ -155,13 +155,17 @@ class Polygon extends Shape2D {
      * Updates the indices array based on the current number of vertices.
      */
     updateIndices() {
-        console.log(this.indices)
         const indices = [];
-        for (let i = 1; i < this.numVertices - 1; i++) {
-            indices.push(0, i, i + 1);
+        for (let i = 0; i < this.numVertices - 2; i++) {
+            if (i === 0) {
+                indices.push(0,i+1,i+2);
+            } else if (i === 1) {
+                indices.push(i, i+2, i+1);
+            } else {
+                indices.push(i, i+2, i+1);
+            }
         }
         this.indices = indices;
-        console.log(this.indices)
     }
 
     /**
