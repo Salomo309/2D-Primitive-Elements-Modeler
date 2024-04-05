@@ -505,6 +505,9 @@ document.addEventListener("DOMContentLoaded", function () {
       populateDeletePointsDropdown(
         document.getElementById("objects-dropdown").value
       );
+      populatePointsDropdown(
+        document.getElementById("objects-dropdown").value
+      );
     }
   });
 
