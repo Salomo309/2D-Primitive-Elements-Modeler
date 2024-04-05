@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   var renderer = new Renderer("#canvas", document);
+  console.log("Succedd");
 
   const squareBtn = document.getElementById("square-btn");
   const lineBtn = document.getElementById("line-btn");

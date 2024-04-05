@@ -4,8 +4,8 @@
 class Renderer{
 
     /**
-     * 
-     * @param {String} canvasId 
+     *
+     * @param {String} canvasId
      * @param {Document} document
      */
     constructor(canvasId, document){
@@ -22,7 +22,7 @@ class Renderer{
          * iii. ProgramInfo
          */
         this.shapes = []
-        
+
         /**
          * @type {WebGLRenderingContext}
          */
@@ -54,9 +54,9 @@ class Renderer{
      * Draw Array with only one program
      * If want to use different program, create buffer-program map
      * then, in this function
-     * 
+     *
      * If you want to animate, seperate bind buffer and draw into 2 different fucntion
-     * 
+     *
      */
     draw(){
         //reset
@@ -78,38 +78,38 @@ class Renderer{
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(shape.getVertices()), this.gl.STATIC_DRAW);
 
-            
+
             //Indices
             console.log(shape.getIndices())
             this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
             this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(shape.getIndices()), this.gl.STATIC_DRAW)
-            
+
 
 
             this.gl.enableVertexAttribArray(this.program.positionAttrLoc);
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionBuffer);
             this.gl.vertexAttribPointer(this.program.positionAttrLoc,2,this.gl.FLOAT, false, 0,0);
-            
 
-           
-            
+
+
+
 
             // Color
             console.log(shape.getColors())
             this.gl.enableVertexAttribArray(this.program.colorAttrLoc);
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer);
             this.gl.vertexAttribPointer(this.program.colorAttrLoc,3, this.gl.FLOAT,false,0,0);
-            
+
 
             shape.drawElements(this.gl);
-            
+
 
             // this.gl.drawArrays(this.gl.TRIANGLES, 0, shape.getVertices().length/2);
         });
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER,null);
     }
-    
+
     createShader(gl, type, source){
         try{
         var shader = gl.createShader(type)
@@ -125,7 +125,7 @@ class Renderer{
             gl.deleteShader(e);
             return null;
         }
-        
+
     }
 
     createProgram(gl, vertexCode, fragmentCode){
@@ -179,7 +179,7 @@ class Renderer{
         const shape = this.shapes.find(shape => shape.id === selectedObjectId);
         if (shape) {
             const midPoint = shape.uniform.midPoint;
-            shape.rotate(midPoint.coor[0], midPoint.coor[1], angle);
+            shape.rotate(angle);
             this.draw();
         }
     }
@@ -224,12 +224,12 @@ class Renderer{
 class ProgramInfo{
 
     /**
-     * 
-     * @param {WebGLRenderingContext} gl 
-     * @returns 
+     *
+     * @param {WebGLRenderingContext} gl
+     * @returns
      */
     constructor(gl){
-        const vert_code = 
+        const vert_code =
         `
         attribute vec2 position;
         attribute vec3 color;
@@ -240,7 +240,7 @@ class ProgramInfo{
             vColor = color;
         }
         `
-        const frag_code = 
+        const frag_code =
         `
         precision mediump float;
         varying vec3 vColor;
@@ -288,6 +288,6 @@ class ProgramInfo{
             gl.deleteShader(e);
             return null;
         }
-        
+
     }
 }

@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // line3.rotate(0, 0, 30)
     // const line4 = new Line(-0.9, 0, 0.9, 0, '#CAB309');
     // line4.scale(0.5)
-    const line5 = new Line(-0.9, 0, 0.9, 0, '#802AE1');
-    line5.changeLength(1);
+    // const line5 = new Line(-0.9, 0, 0.9, 0, '#802AE1');
+    // line5.changeLength(2);
 
     const polygon = new Polygon([
         -0.5, -0.2,   // Titik 1
@@ -38,6 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // renderer.addShape(line2);
     // renderer.addShape(line3);
     // renderer.addShape(line4);
-    renderer.addShape(line5);
-    // renderer.addShape(polygon)
+    // renderer.addShape(line5);
+    renderer.addShape(polygon)
 });

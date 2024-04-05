@@ -9,6 +9,7 @@ class Line extends Shape2D {
     constructor(x1, y1, x2, y2, color) {
         const midPoint = new Point([(x1 + x2) / 2, (y1 + y2) / 2], Color.fromHex(color));
 
+
         super(
             new Vertices(
                 [
@@ -72,5 +73,16 @@ class Line extends Shape2D {
     static deserialize(data) {
         const points = data.points.map(pointData => new Point(pointData.coor, Color.fromHex(pointData.color)));
         return new Line(points[0].getVertex()[0], points[0].getVertex()[1], points[1].getVertex()[0], points[1].getVertex()[1], data.points[0].color);
+    }
+
+    /**
+     * @override
+     */
+    updateMidPoint() {
+        const x1 = this.vertices.vertices[0].coor[0]
+        const x2 = this.vertices.vertices[1].coor[0]
+        const y1 = this.vertices.vertices[0].coor[1]
+        const y2 = this.vertices.vertices[1].coor[1]
+        this.uniform.midPoint = new Point([(x1 + x2) / 2, (y1 + y2) / 2], Color.fromHex(this.color));
     }
 }

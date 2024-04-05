@@ -29,6 +29,7 @@ class Polygon extends Shape2D {
             new Uniforms(midPoint)
         );
         this.color = color
+        console.log(this.vertices)
     }
 
     /**
@@ -91,9 +92,9 @@ class Polygon extends Shape2D {
     /**
      * Removes the last vertex from the polygon.
      */
-    removeVertex() {
-        const vertices = this.vertices;
-        const numVertices = vertices.length / 2;
+    removeVertex(index) {
+        const vertices = this.vertices.vertices;
+        const numVertices = vertices.length;
         const midPoint = this.uniform.midPoint;
 
         if (numVertices <= 3) {
@@ -101,15 +102,11 @@ class Polygon extends Shape2D {
             return;
         }
 
+        // Delete chosen vertex
+        vertices.splice(index, 1);
+
         // Calculate new midpoint
-        const newMidX = (midPoint.coor[0] * numVertices - vertices[vertices.length - 2]) / (numVertices - 1);
-        const newMidY = (midPoint.coor[1] * numVertices - vertices[vertices.length - 1]) / (numVertices - 1);
-
-        // Update uniform
-        this.uniform.midPoint.setCoordinates(newMidX, newMidY);
-
-        // Remove last vertex from vertices array
-        this.vertices.vertices.pop();
+        this.updateMidPoint()
 
         // Update number of vertices
         this.numVertices--;
