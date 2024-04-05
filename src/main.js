@@ -27,25 +27,25 @@ document.addEventListener("DOMContentLoaded", function () {
     URL.revokeObjectURL(url);
   });
 
-  importForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    const file = fileInput.files[0];
+  // importForm.addEventListener("submit", function (event) {
+  //   event.preventDefault();
+  //   const file = fileInput.files[0];
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const fileContent = e.target.result;
-        try {
-          const jsonData = JSON.parse(fileContent);
-          recreateModel(jsonData);
-        } catch (error) {
-          console.error("Error parsing JSON:", error);
-        }
-      };
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = function (e) {
+  //       const fileContent = e.target.result;
+  //       try {
+  //         const jsonData = JSON.parse(fileContent);
+  //         recreateModel(jsonData);
+  //       } catch (error) {
+  //         console.error("Error parsing JSON:", error);
+  //       }
+  //     };
 
-      reader.readAsText(file);
-    }
-  });
+  //     reader.readAsText(file);
+  //   }
+  // });
 
   function gatherModelData() {
     const modelData = {
@@ -127,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
     dropdown.insertBefore(option, dropdown.firstChild);
     dropdown.selectedIndex = 0;
     populatePointsDropdown(id);
+    populateDeletePointsDropdown(id)
   }
 
   function clearObjectDropdown() {
@@ -152,6 +153,23 @@ document.addEventListener("DOMContentLoaded", function () {
     updateColorPicker();
   }
 
+  function populateDeletePointsDropdown(selectedObjectId) {
+    const dropdown = document.getElementById("delete-points-dropdown");
+    dropdown.innerHTML = "";
+
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+    if (selectedShape) {
+      const vertices = selectedShape.getVertices().length / 2;
+      console.log(vertices);
+      for (let i = 0; i < vertices; i++) {
+        const option = document.createElement("option");
+        option.text = `Point ${i + 1}`;
+        option.id = i;
+        dropdown.appendChild(option);
+      }
+    }
+  }
+
   function clearPointsDropdown() {
     const dropdown = document.getElementById("points-dropdown");
     dropdown.innerHTML = "";
@@ -164,10 +182,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const moveBtn = document.getElementById("move-btn");
   const scaleBtn = document.getElementById("scale-btn");
   const colorPicker = document.getElementById("color-picker");
+  const addPointBtn = document.getElementById("addpoint-btn");
+  const delPointBtn = document.getElementById("deletepoint-btn");
   const pointsDropdown = document.getElementById("points-dropdown");
 
   objectDropdown.addEventListener("change", function (event) {
     populatePointsDropdown(document.getElementById("objects-dropdown").value);
+    populateDeletePointsDropdown(document.getElementById("objects-dropdown").value)
   });
 
   function updateColorPicker() {
@@ -206,13 +227,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+
+
   function deactivateAllButtons() {
     rotateActive = false;
     moveActive = false;
     scaleActive = false;
+    addPointActive = false;
+    delPointActive = false;
     rotateBtn.classList.remove("bg-green-700", "text-white");
     moveBtn.classList.remove("bg-green-700", "text-white");
     scaleBtn.classList.remove("bg-green-700", "text-white");
+    addPointBtn.classList.remove("bg-green-700", "text-white");
+    delPointBtn.classList.remove("bg-green-700", "text-white");
   }
 
   function callRotateOperation(deltaX, deltaY, selectedObjectId) {
@@ -256,6 +283,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function callAddPointOperation(
+    lastMouseX,
+    lastMouseY,
+    selectedObjectId
+  ) {
+    const selectedShape = renderer.getShapeById(selectedObjectId);
+    if (selectedShape) {
+      renderer.addPoint(
+        lastMouseX,
+        lastMouseY,
+        selectedObjectId
+      );
+    } else {
+      return;
+    }
+  }
+
   rotateBtn.addEventListener("click", function () {
     deactivateAllButtons();
     rotateActive = true;
@@ -274,6 +318,18 @@ document.addEventListener("DOMContentLoaded", function () {
     scaleBtn.classList.add("bg-green-700", "text-white");
   });
 
+  addPointBtn.addEventListener("click", function () {
+    deactivateAllButtons();
+    addPointActive = true;
+    addPointBtn.classList.add("bg-green-700", "text-white");
+  });
+
+  delPointBtn.addEventListener("click", function () {
+    deactivateAllButtons();
+    delPointActive = true;
+    delPointBtn.classList.add("bg-green-700", "text-white");
+  });
+
   let mouseDown = false;
   let lastMouseX = 0;
   let lastMouseY = 0;
@@ -284,9 +340,11 @@ document.addEventListener("DOMContentLoaded", function () {
   let rotateActive = false;
   let moveActive = false;
   let scaleActive = false;
+  let addPointActive = false;
+  let delPointActive = false;
 
   renderer.canvas.addEventListener("mousedown", function (event) {
-    if (rotateActive || moveActive || scaleActive) {
+    if (rotateActive || moveActive || scaleActive || addPointActive || delPointActive) {
       mouseDown = true;
       lastMouseX = event.clientX;
       lastMouseY = event.clientY;
@@ -301,6 +359,7 @@ document.addEventListener("DOMContentLoaded", function () {
       lastMouseY = event.clientY;
       callRotateOperation(deltaX, deltaY, objectDropdown.value);
     } else if (moveActive && mouseDown) {
+      console.log(event.clientX)
       const deltaX = (event.clientX - lastMouseX) * moveSpeed;
       const deltaY = (event.clientY - lastMouseY) * moveSpeed * -1;
       lastMouseX = event.clientX;
@@ -318,6 +377,26 @@ document.addEventListener("DOMContentLoaded", function () {
         lastMouseY,
         objectDropdown.value
       );
+    }
+  });
+
+  renderer.canvas.addEventListener("click", function(event) {
+    if (addPointActive) {
+      const rect = renderer.canvas.getBoundingClientRect();
+        const canvasWidth = renderer.canvas.width;
+        const canvasHeight = renderer.canvas.height;
+
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+
+        const clipX = (mouseX / canvasWidth) * 2 - 1;
+        const clipY = ((canvasHeight - mouseY) / canvasHeight) * 2 - 1;
+
+        console.log("Clip X:", clipX);
+        console.log("Clip Y:", clipY);
+
+        callAddPointOperation(clipX, clipY, objectDropdown.value);
+        populateDeletePointsDropdown(document.getElementById("objects-dropdown").value)
     }
   });
 

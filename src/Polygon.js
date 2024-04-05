@@ -29,7 +29,7 @@ class Polygon extends Shape2D {
             new Uniforms(midPoint)
         );
         this.color = color
-        console.log(this.vertices)
+        this.vertices.vertices = this.sortVertexes()
     }
 
     /**
@@ -46,6 +46,39 @@ class Polygon extends Shape2D {
         });
     }
 
+    sortVertexes() {
+        const vertices = this.vertices.vertices;
+        const midPoint = this.uniform.midPoint;
+
+        // Calculate angles between each vertex and the midpoint
+        const angles = [];
+        for (let i = 0; i < vertices.length; i++) {
+            const vertex = vertices[i];
+            const dx = vertex.coor[0] - midPoint.coor[0];
+            const dy = vertex.coor[1] - midPoint.coor[1];
+            angles.push({ index: i, angle: Math.atan2(dy, dx) });
+        }
+
+        // Sort vertices based on angles
+        angles.sort((a, b) => a.angle - b.angle);
+
+        console.log(angles)
+
+        // Rearrange vertices based on sorted indices
+        const sortedVertices = [];
+        angles.forEach(angle => {
+            sortedVertices.push(vertices[angle.index]);
+        });
+        console.log(sortedVertices)
+
+        // Update vertices with sorted order
+        for (let i = 0; i < vertices.length; i++) {
+            vertices[i] = sortedVertices[i];
+        }
+
+        return vertices;
+    }
+
 
     // ** SPECIAL METHOD ** //
     /**
@@ -55,6 +88,7 @@ class Polygon extends Shape2D {
      */
     addVertex(x, y) {
         const vertices = this.vertices.vertices;
+        console.log(vertices)
         const numVertices = vertices.length / 2;
 
         // New MidPoint
@@ -65,13 +99,12 @@ class Polygon extends Shape2D {
         // New point
         const newPoint = new Point([x, y], Color.fromHex(this.color));
 
-        // Nearest 2-Point (cari 2 point terdekat)
         let minDistance = Number.POSITIVE_INFINITY;
         let nearestIndex = -1;
 
-        for (let i = 0; i < vertices.length; i += 2) {
-            const vertexX = vertices[i].getVertex()[0];
-            const vertexY = vertices[i].getVertex()[1];
+        for (let i = 0; i < vertices.length; i++) {
+            const vertexX = vertices[i].coor[0];
+            const vertexY = vertices[i].coor[1];
             const distance = Math.sqrt((x - vertexX) ** 2 + (y - vertexY) ** 2);
 
             if (distance < minDistance) {
@@ -80,13 +113,18 @@ class Polygon extends Shape2D {
             }
         }
 
-        // Insert New Point
-        vertices.splice(nearestIndex, 0, newPoint);
+        let insertIndex = nearestIndex;
+        if (nearestIndex === vertices.length - 2) {
+            insertIndex += 2;
+        } else {
+            insertIndex += 2;
+        }
+        this.vertices.vertices.splice(insertIndex, 0, newPoint);
+        console.log(this.vertices.vertices)
 
         this.numVertices++;
         this.updateIndices();
         this.uniform.midPoint.setCoordinates(newMidX, newMidY);
-        // this.rotate(newMidX, newMidY, 10);
     }
 
     /**
@@ -133,7 +171,7 @@ class Polygon extends Shape2D {
      * @param {WebGLRenderingContext} gl
      */
     drawElements(gl) {
-        gl.drawElements(gl.TRIANGLES, this.getIndices().length, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLE_FAN, this.getIndices().length, gl.UNSIGNED_SHORT, 0);
     }
 
     /**

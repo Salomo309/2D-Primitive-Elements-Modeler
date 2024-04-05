@@ -214,6 +214,14 @@ class Renderer{
             return shape.vertices.vertices[selectedPointIndex].color.toHex();
         }
     }
+
+    addPoint(newPointX, newPointY, selectedObjectId) {
+        const shape = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (shape instanceof Polygon || shape instanceof Polygon) {
+            shape.addVertex(newPointX, newPointY);
+            this.draw();
+        }
+    }
 }
 
 
