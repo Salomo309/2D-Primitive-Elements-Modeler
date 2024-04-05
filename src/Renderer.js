@@ -222,6 +222,14 @@ class Renderer{
             this.draw();
         }
     }
+
+    deletePoint(pointIndex, selectedObjectId) {
+        const shape = this.shapes.find(shape => shape.id === selectedObjectId);
+        if (shape instanceof Polygon || shape instanceof Polygon) {
+            shape.removeVertex(pointIndex)
+            this.draw();
+        }
+    }
 }
 
 
